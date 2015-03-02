@@ -1,0 +1,21 @@
+apply plugin: "java"
+apply plugin: "scala"
+
+sourceCompatibility = 1.6
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+sourceSets.main.java.srcDirs = [ ]
+sourceSets.main.scala.srcDirs = [ "src/" ]
+
+compileScala.taskDependencies.values = compileScala.taskDependencies.values - 'compileJava'
+compileJava.dependsOn compileScala
+
+dependencies {
+    compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+    compile "org.scala-lang:scala-library:2.11.0"
+}
+
+
+eclipse.project {
+    name = appName + "-core"
+}
