@@ -3,6 +3,7 @@ package com.mygdx.game.java;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -15,6 +16,7 @@ public class MyGdxGame extends ApplicationAdapter {
     Stage stage;
     Viewport viewport;
     Ball ball;
+    Sprite sprite;
 
 	@Override
 	public void create () {
@@ -40,4 +42,9 @@ public class MyGdxGame extends ApplicationAdapter {
 	//	batch.draw(img, 0, 0);
 	//	batch.end();
 	}
+
+    @Override
+    public void dispose() {
+        stage.dispose();                        /**Just a good thing to do*/
+    }
 }
