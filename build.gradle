@@ -75,6 +75,7 @@ project(":core") {
 
 
         testCompile "junit:junit:4.11"
+        compile 'org.scalatest:scalatest_2.11:2+'
 
 
     }

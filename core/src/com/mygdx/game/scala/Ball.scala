@@ -7,8 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 /**
  * Created by Denis on 02-Mar-15.
  */
-class Ball extends Actor {                                   /**So you coold understand*/
-  val img = new Texture("ball.png")                          /**Initializing your imagaes*/
+class Ball extends Actor {                                   /**So you could understand*/
+  val img = new Texture("ball.png")                          /**Initializing your images*/
   val red = new Texture("red.png")
   val green = new Texture("green.png")
   val pink = new Texture("pink.png")
