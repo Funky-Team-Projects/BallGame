@@ -7,17 +7,44 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 /**
  * Created by Denis on 02-Mar-15.
  */
-class Ball extends Actor {                                   /**So you could understand*/
-  val img = new Texture("ball.png")                          /**Initializing your images*/
-  val red = new Texture("red.png")
-  val green = new Texture("green.png")
-  val pink = new Texture("pink.png")
+class Ball extends Actor {
+
+  /**Initializing your images*/
+
+  val red = SpriteWrapper("ball.png")
+  val green = SpriteWrapper("green.png")
+  green.center = red.center + Pos(10, 10)
+  green.sprite.setOrigin(red.center.x - 5, red.center.y - 5)
+  val pink = SpriteWrapper("pink.png")
+  pink.center = green.center + Pos(-5,-5)
 
   override def draw(batch: Batch, parentAlpha: Float) = {
+    implicit var ballBatch = batch
 
-    batch.draw(red, 0, 0, 60, 60)                           /**Drawing Red circle at given position (0,0) and given size (60,60)*/
-    batch.draw(green, 0, 0, 50, 50)                         /**Drawing Green circle at given position (0,0) and given size (50,50)*/
-    batch.draw(pink, 0, 0, 40, 40)                          /**Drawing Pink circle at given position (0,0) and given size (40,40)*/
-                                                            /**Size parameters are somehow connected to the texture size*/
+    /**Drawing Psychedelic circle*/
+    red.draw
+    green.draw
+    pink.draw
+
+  }
+
+  override def act(delta: Float) = {
+    green.sprite.rotate(1)
+
+  }
+}
+
+class Balll extends Actor {                                   /**So you could understand*/
+
+val elems = List(new SpriteWrapper("ball.png"),
+  new SpriteWrapper("green.png"),
+  new SpriteWrapper("pink.png"))
+
+  override def draw(batch: Batch, parentAlpha: Float) = {
+    implicit var ballBatch = batch
+
+    /**Drawing Psychedelic circle*/
+    elems.foreach( _.draw)
+
   }
 }
