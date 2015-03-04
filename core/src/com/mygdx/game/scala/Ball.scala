@@ -13,10 +13,11 @@ class Ball extends Actor {
 
   val red = SpriteWrapper("ball.png")
   val green = SpriteWrapper("green.png")
-  green.center = red.center + Pos(10, 10)
-  green.sprite.setOrigin(red.center.x - 5, red.center.y - 5)
+  green.center = red.center + Pos(15, 15)
+
+  green.origin = red.center // - (green.center - green.position)
   val pink = SpriteWrapper("pink.png")
-  pink.center = green.center + Pos(-5,-5)
+//  pink.center = green.center + Pos(-5,-5)
 
   override def draw(batch: Batch, parentAlpha: Float) = {
     implicit var ballBatch = batch

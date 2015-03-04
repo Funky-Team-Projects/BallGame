@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.{Batch, Sprite}
 
 class SpriteWrapper(val sprite: Sprite) {
 
+
   def this(){
     this(new Sprite())
   }
@@ -22,8 +23,14 @@ class SpriteWrapper(val sprite: Sprite) {
     this(new Texture(texturePath))
   }
 
-  def center: Pos = Pos(sprite.getX() + sprite.getWidth() / 2.0f, sprite.getY() + sprite.getHeight() / 2.0f)
+  def center: Pos = Pos(position.x + sprite.getWidth() / 2.0f, position.y + sprite.getHeight() / 2.0f)
   def center_=(pos: Pos): Unit = sprite.setCenter(pos.x, pos.y)
+
+  def position: Pos = Pos(sprite.getX(), sprite.getY())
+  def position_=(pos: Pos): Unit = sprite.setPosition(pos.x, pos.y)
+
+  def origin: Pos = Pos(sprite.getOriginX(), sprite.getOriginY())
+  def origin_=(pos: Pos): Unit = sprite.setOrigin(pos.x, pos.y)
 
   def draw(implicit batch: Batch) = sprite.draw(batch)
 
