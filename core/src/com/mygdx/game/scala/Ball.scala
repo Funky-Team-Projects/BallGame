@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 class Ball extends Actor {
 
   /**Initializing your images*/
+  var jump = false
 
   var speed: Pos = Pos(0,0)
 
@@ -34,6 +35,12 @@ class Ball extends Actor {
   }
 
   override def act(delta: Float) = {
+
+    if (jump) red.center = {
+      red.center addY 10
+      green.center addY 10
+      pink.center addY 10
+    }
     /**Green modifications*/
     green.rotate(red.center, 1)
     /**Pink modifications*/
