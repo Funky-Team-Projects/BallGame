@@ -12,6 +12,8 @@ class Ball extends Actor {
 
   /**Initializing your images*/
 
+  var speed: Pos = Pos(0,0)
+
   val red = SpriteWrapper("ball.png")
   val green = SpriteWrapper("green.png")
   green.center = red.center + Pos(4, 4)
@@ -32,27 +34,13 @@ class Ball extends Actor {
   }
 
   override def act(delta: Float) = {
-    v.rotate(1)
-    green.center = red.center + new Pos(v)
-    v.set((green.center - red.center).x, (green.center - red.center).y)
-    v2.rotate(-2)
-    pink.center = green.center + new Pos(v2)
-    v2.set((pink.center - green.center).x, (pink.center - green.center).y)
+    /**Green modifications*/
+    green.rotate(red.center, 1)
+    /**Pink modifications*/
+    pink.rotate(green.center, -2)
 
   }
+
 }
 
-class Balll extends Actor {                                   /**So you could understand*/
 
-val elems = List(new SpriteWrapper("ball.png"),
-  new SpriteWrapper("green.png"),
-  new SpriteWrapper("pink.png"))
-
-  override def draw(batch: Batch, parentAlpha: Float) = {
-    implicit var ballBatch = batch
-
-    /**Drawing Psychedelic circle*/
-    elems.foreach( _.draw)
-
-  }
-}

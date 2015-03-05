@@ -35,6 +35,13 @@ class SpriteWrapper(val sprite: Sprite) {
 
   def draw(implicit batch: Batch) = sprite.draw(batch)
 
+  def rotate(point: Pos, degree: Float): Unit = {
+    val dist = center - point
+    val v: Vector2 = new Vector2(dist.x, dist.y)
+    v.rotate(degree)
+    center = point + Pos(v)
+  }
+
 
 }
 
