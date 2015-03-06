@@ -33,6 +33,9 @@ class SpriteWrapper(val sprite: Sprite) {
   def origin: Pos = Pos(sprite.getOriginX(), sprite.getOriginY())
   def origin_=(pos: Pos): Unit = sprite.setOrigin(pos.x, pos.y)
 
+  def size: Pos = Pos(sprite.getWidth(), sprite.getHeight())
+  def size_=(pos: Pos): Unit = sprite.setSize(pos.x, pos.y)
+
   def draw(implicit batch: Batch) = sprite.draw(batch)
 
   def rotate(point: Pos, degree: Float): Unit = {
