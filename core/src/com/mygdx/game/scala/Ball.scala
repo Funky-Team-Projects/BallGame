@@ -13,13 +13,19 @@ class Ball extends Actor {
   /**Initializing your images*/
   var jump = false
 
-  var speed: Pos = Pos(0,0)
+  //var speed: Pos = Pos(0,0)
 
-  val red = SpriteWrapper("ball.png")
-  val green = SpriteWrapper("green.png")
+  val red = SpriteWrapper("white.png")
+  red.sprite.setSize(120, 120)
+  red.sprite.setColor(1, 0, 0, 1)
+  val green = SpriteWrapper("white.png")
+  green.sprite.setColor(0, 1, 0, 1)
+  green.sprite.setSize(70, 70)
   green.center = red.center + Pos(4, 4)
-  val pink = SpriteWrapper("pink.png")
-  pink.center = green.center + Pos(-6, -6)
+  val pink = SpriteWrapper("white.png")
+  pink.sprite.setSize(40, 40)
+  pink.sprite.setColor(0,0,1,1)
+  pink.center = green.center + Pos(-3, -3)
 
   val v: Vector2 = new Vector2((green.center - red.center).x, (green.center - red.center).y)
   val v2: Vector2 = new Vector2((pink.center - green.center).x, (pink.center - green.center).y)
@@ -28,23 +34,27 @@ class Ball extends Actor {
     implicit var ballBatch = batch
 
     /**Drawing Psychedelic circle*/
-    red.draw
-    green.draw
-    pink.draw
+
+    red.draw(batch)
+
+    green.draw(batch)
+
+    pink.draw(batch)
 
   }
 
   override def act(delta: Float) = {
 
-    if (jump) red.center = {
-      red.center addY 10
-      green.center addY 10
-      pink.center addY 10
+    if (jump) {
+      red.center = red.center addY 10
+      green.center = green.center addY 10
+      pink.center = pink.center addY 10
     }
     /**Green modifications*/
-    green.rotate(red.center, 1)
+    green.rotate(red.center, 2)
     /**Pink modifications*/
-    pink.rotate(green.center, -2)
+    pink.rotate(red.center, 2)
+    pink.rotate(green.center, -4)
 
   }
 
