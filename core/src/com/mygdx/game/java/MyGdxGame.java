@@ -23,7 +23,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
         img = new Texture("badlogic.jpg");
-        viewport = new StretchViewport(700, 500); /**Creates a viewport with the responding size*/
+        viewport = new StretchViewport(900, 700); /**Creates a viewport with the responding size*/
         ball = new Ball();
 
         stage = new Stage(viewport, batch);       /**Creates stage on our viewport with our batch*/

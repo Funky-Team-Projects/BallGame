@@ -16,7 +16,7 @@ class Ball extends Actor {
   var speed: Pos = Pos(0,0)
 
   val outer = SpriteWrapper("white.png")
-  outer.center = Pos(20,20)
+  outer.position = Pos(20,20)
   outer.sprite.setSize(120, 120)
   outer.sprite.setColor(1, 0, 0, 1)
   val middle = SpriteWrapper("white.png")
@@ -64,12 +64,14 @@ class Ball extends Actor {
   }
 
   def jump: Unit = if (grounded) {
-      speed += Pos(0, 20)
-      grounded = false
-    }
-  def groundCheck = if (outer.center.y <= 20) {
+    speed += Pos(0, 20)
+    grounded = false
+  }
+  def groundCheck = if (outer.position.y <= 20) {
     grounded = true
-    outer.center = Pos(outer.center.x, 21)
+    inner.position = inner.position addY (21 - outer.position.y)
+    middle.position = middle.position addY (21 - outer.position.y)
+    outer.position = Pos(outer.position.x, 21)
     speed = speed addY -speed.y
   }
 
