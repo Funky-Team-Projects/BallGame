@@ -12,6 +12,7 @@ class Ball extends Actor {
 
   /**Initializing your images*/
 
+
   var grounded = true
   var speed: Pos = Pos(0,0)
 

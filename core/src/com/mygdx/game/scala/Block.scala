@@ -11,14 +11,18 @@ class Block extends Actor {
 
   val sprite: SpriteWrapper = SpriteWrapper("square.png")
 
+
   def size: Pos = sprite.size
   def size_=(pos: Pos): Unit = sprite.size = pos
 
   def position: Pos = sprite.position
   def position_=(pos: Pos): Unit = sprite.position = pos
 
-  def color: Color = sprite.sprite.getColor
-  def color_=(color: Color) = sprite.sprite.setColor(color)
+  def bcolor: Color = sprite.sprite.getColor
+  def bcolor_=(color: Color) = sprite.sprite.setColor(color)
+
+  def top = (position + size).y
+  def bottom = position.y
 
   override def draw(batch: Batch, parentalAlpha: Float ) {
     sprite.draw(batch)
