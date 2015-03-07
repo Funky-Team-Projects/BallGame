@@ -44,14 +44,14 @@ class Ball extends Actor {
 
   override def act(delta: Float) = {
 
-    groundCheck
-    move
 
+    move
     /**Green modifications*/
     middle.rotate(outer.center, 2)
     /**Pink modifications*/
     inner.rotate(outer.center, 2)
     inner.rotate(middle.center, -4)
+    groundCheck
 
   }
 

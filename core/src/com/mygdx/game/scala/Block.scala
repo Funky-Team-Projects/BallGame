@@ -11,7 +11,6 @@ class Block extends Actor {
 
   val sprite: SpriteWrapper = SpriteWrapper("square.png")
 
-
   def size: Pos = sprite.size
   def size_=(pos: Pos): Unit = sprite.size = pos
 
@@ -21,11 +20,11 @@ class Block extends Actor {
   def color: Color = sprite.sprite.getColor
   def color_=(color: Color) = sprite.sprite.setColor(color)
 
-
   override def draw(batch: Batch, parentalAlpha: Float ) {
     sprite.draw(batch)
   }
 
+  /**check if this block contains given position*/
   def contains(pos: Pos): Boolean =
     (pos.x >= sprite.position.x && pos.x <= sprite.position.x + size.x) &&
     (pos.y >= sprite.position.y && pos.y <= sprite.position.y + size.y)
