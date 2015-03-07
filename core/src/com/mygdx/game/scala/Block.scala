@@ -18,8 +18,8 @@ class Block extends Actor {
   def position: Pos = sprite.position
   def position_=(pos: Pos): Unit = sprite.position = pos
 
-  def bcolor: Color = sprite.sprite.getColor
-  def bcolor_=(color: Color) = sprite.sprite.setColor(color)
+  def bColor: Color = sprite.sprite.getColor
+  def bColor_=(color: Color) = sprite.sprite.setColor(color)
 
   def top = (position + size).y
   def bottom = position.y

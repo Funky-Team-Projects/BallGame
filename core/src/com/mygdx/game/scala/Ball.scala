@@ -1,45 +1,62 @@
 package com.mygdx.game.scala
 
-import com.badlogic.gdx.graphics.Texture
+
+
+import com.badlogic.gdx.graphics.{Color, Texture}
 import com.badlogic.gdx.graphics.g2d.{TextureRegion, Batch}
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
 /**
  * Created by Denis on 02-Mar-15.
  */
-class Ball extends Actor {
+class Ball extends Image {
 
   /**Initializing your images*/
 
+  def center: Pos = position + size / 2
+  def center_=(pos: Pos): Unit = {  position = position - pos / 2 }
+
+  def position: Pos = Pos(getX, getY)
+  def position_=(pos: Pos): Unit = {
+    setX(pos.x)
+    setY(pos.y)
+  }
+  def size: Pos = Pos(getWidth, getHeight)
+  def size_=(pos: Pos): Unit = {
+    setWidth(pos.x)
+    setHeight(pos.y)
+  }
+
+  center = Pos(20, 20)
 
   var grounded = true
   var speed: Pos = Pos(0,0)
 
-  val outer = SpriteWrapper("white.png")
-  outer.position = Pos(20,20)
-  outer.size = Pos(120,120)
-  outer.sprite.setColor(1, 0, 0, 1)
+  val outer = new TextureDrawable("white.png")
+  val middle = new TextureDrawable("white.png")
+  val inner = new TextureDrawable("white.png")
 
-  val middle = SpriteWrapper("white.png")
-  middle.sprite.setColor(0, 1, 0, 1)
-  middle.size = Pos(70, 70)
-  middle.center = outer.center + Pos(4, 4)
+  middle.scale = Pos(0.5f, 0.5f)
+  inner.scale = Pos(0.25f, 0.25f)
 
-  val inner = SpriteWrapper("white.png")
-  inner.size = Pos(40, 40)
-  inner.sprite.setColor(0,0,1,1)
-  inner.center = middle.center + Pos(-3, -3)
+  outer.color = new Color(1, 0, 0, 1)
+  middle.color = new Color(0, 1, 0, 1)
+  inner.color = new Color(0, 0, 1, 1)
+
+  middle.shift = Pos(4, 4)
+  inner.shift = Pos(-3, -3)
 
 
   override def draw(batch: Batch, parentAlpha: Float) = {
-    implicit var ballBatch = batch
 
     /**Drawing Psychedelic circle*/
 
-    outer.draw(batch)
-    middle.draw(batch)
-    inner.draw(batch)
+    outer.draw(batch, position, size)
+    middle.draw(batch, position, size)
+    inner.draw(batch, position, size)
 
   }
 
@@ -48,18 +65,16 @@ class Ball extends Actor {
 
     move
     /**Green modifications*/
-    middle.rotate(outer.center, 2)
+    middle.rotate(center, 2)
     /**Pink modifications*/
-    inner.rotate(outer.center, 2)
-    inner.rotate(middle.center, -4)
+    inner.rotate(center, 2)
+    inner.rotate(center, -4)
     groundCheck
 
   }
 
   def move: Unit = {
-    outer.center += speed
-    middle.center += speed
-    inner.center += speed
+    center += speed
 
     if (!grounded) speed -= Pos(0, 1)
   }
@@ -68,11 +83,9 @@ class Ball extends Actor {
     speed += Pos(0, 20)
     grounded = false
   }
-  def groundCheck = if (outer.position.y <= 20) {
+  def groundCheck = if (position.y <= 20) {
     grounded = true
-    inner.position = inner.position addY (21 - outer.position.y)
-    middle.position = middle.position addY (21 - outer.position.y)
-    outer.position = Pos(outer.position.x, 21)
+    position = position addY (21 - position.y)
     speed = speed addY -speed.y
   }
 
