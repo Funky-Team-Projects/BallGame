@@ -12,23 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 /**
  * Created by Denis on 02-Mar-15.
  */
-class Ball extends Image {
+class Ball extends SImage {
 
   /**Initializing your images*/
-
-  def center: Pos = position + size / 2
-  def center_=(pos: Pos): Unit = {  position = pos - size / 2 }
-
-  def position: Pos = Pos(getX, getY)
-  def position_=(pos: Pos): Unit = {
-    setX(pos.x)
-    setY(pos.y)
-  }
-  def size: Pos = Pos(getWidth, getHeight)
-  def size_=(pos: Pos): Unit = {
-    setWidth(pos.x)
-    setHeight(pos.y)
-  }
 
   center = Pos(20, 20)
   size = Pos(120, 120)

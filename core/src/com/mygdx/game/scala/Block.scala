@@ -3,35 +3,31 @@ package com.mygdx.game.scala
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.ui.Image
 
 /**
  * Created by Denis on 06-Mar-15.
  */
-class Block extends Actor {
+class Block extends SImage {
 
-  val sprite: SpriteWrapper = SpriteWrapper("square.png")
+  val drawable: TextureDrawable = new TextureDrawable("square.png")
 
 
-  def size: Pos = sprite.size
-  def size_=(pos: Pos): Unit = sprite.size = pos
-
-  def position: Pos = sprite.position
-  def position_=(pos: Pos): Unit = sprite.position = pos
-
-  def bColor: Color = sprite.sprite.getColor
-  def bColor_=(color: Color) = sprite.sprite.setColor(color)
+  def bColor: Color = drawable.color
+  def bColor_=(color: Color) = drawable.color = color
 
   def top = (position + size).y
   def bottom = position.y
 
   override def draw(batch: Batch, parentalAlpha: Float ) {
-    sprite.draw(batch)
+
+    drawable.draw(batch, position, size)
   }
 
   /**check if this block contains given position*/
   def contains(pos: Pos): Boolean =
-    (pos.x >= sprite.position.x && pos.x <= sprite.position.x + size.x) &&
-    (pos.y >= sprite.position.y && pos.y <= sprite.position.y + size.y)
+    (pos.x >= position.x && pos.x <= position.x + size.x) &&
+    (pos.y >= position.y && pos.y <= position.y + size.y)
 
 
 }
