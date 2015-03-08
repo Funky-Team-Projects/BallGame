@@ -23,7 +23,11 @@ class TextureDrawable extends TextureRegionDrawable {
 
   def draw(batch: Batch, position: Pos, size: Pos): Unit = {
     batch.setColor(color)
-    super.draw(batch, position.x + shift.x, position.y+ shift.y, size.x*scale.x, size.y*scale.y)
+    super.draw(batch, position.x + shift.x, position.y + shift.y, size.x*scale.x, size.y*scale.y)
+  }
+
+  def drawC(batch: Batch, position: Pos, size: Pos): Unit ={
+    draw(batch, position - size*scale/2, size)
   }
 
   def rotate(point: Pos, degree: Float): Unit = {

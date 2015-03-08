@@ -17,7 +17,7 @@ class Ball extends Image {
   /**Initializing your images*/
 
   def center: Pos = position + size / 2
-  def center_=(pos: Pos): Unit = {  position = position - pos / 2 }
+  def center_=(pos: Pos): Unit = {  position = pos - size / 2 }
 
   def position: Pos = Pos(getX, getY)
   def position_=(pos: Pos): Unit = {
@@ -31,6 +31,7 @@ class Ball extends Image {
   }
 
   center = Pos(20, 20)
+  size = Pos(120, 120)
 
   var grounded = true
   var speed: Pos = Pos(0,0)
@@ -46,17 +47,17 @@ class Ball extends Image {
   middle.color = new Color(0, 1, 0, 1)
   inner.color = new Color(0, 0, 1, 1)
 
-  middle.shift = Pos(4, 4)
-  inner.shift = Pos(-3, -3)
+  middle.shift = Pos(8, 8)
+  inner.shift = Pos(-4, -4)
 
 
   override def draw(batch: Batch, parentAlpha: Float) = {
 
     /**Drawing Psychedelic circle*/
 
-    outer.draw(batch, position, size)
-    middle.draw(batch, position, size)
-    inner.draw(batch, position, size)
+    outer.drawC(batch, center, size)
+    middle.drawC(batch, center, size)
+    inner.drawC(batch, center + middle.shift, size)
 
   }
 
@@ -67,7 +68,6 @@ class Ball extends Image {
     /**Green modifications*/
     middle.rotate(center, 2)
     /**Pink modifications*/
-    inner.rotate(center, 2)
     inner.rotate(center, -4)
     groundCheck
 
