@@ -16,7 +16,7 @@ class Block extends SImage {
   def bColor: Color = drawable.color
   def bColor_=(color: Color) = drawable.color = color
 
-  def top = (position + size).y
+  def top = position.y + size.y
   def bottom = position.y
 
   override def draw(batch: Batch, parentalAlpha: Float ) {

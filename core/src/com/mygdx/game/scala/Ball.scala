@@ -19,6 +19,7 @@ class Ball extends SImage {
   center = Pos(20, 20)
   size = Pos(120, 120)
 
+  var world: World = new World
   var grounded = true
   var speed: Pos = Pos(0,0)
 
@@ -49,12 +50,11 @@ class Ball extends SImage {
 
   override def act(delta: Float) = {
 
-
     move
     /**Green modifications*/
-    middle.rotate(center, 2)
+    middle.rotate(2)
     /**Pink modifications*/
-    inner.rotate(center, -4)
+    inner.rotate(-4)
     groundCheck
 
   }

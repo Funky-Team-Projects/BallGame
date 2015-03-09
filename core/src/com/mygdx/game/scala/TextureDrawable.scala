@@ -30,9 +30,7 @@ class TextureDrawable extends TextureRegionDrawable {
     draw(batch, position - size*scale/2, size)
   }
 
-  def rotate(point: Pos, degree: Float): Unit = {
-    val v: Vector2 = new Vector2(shift.x, shift.y)
-    v.rotate(degree)
-    shift = Pos(v)
+  def rotate(degree: Float): Unit = {
+    shift = shift.rotate(degree)
   }
 }
