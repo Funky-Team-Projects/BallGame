@@ -15,6 +15,8 @@ class World {
   /**checks if some of the block contains given position*/
   def contains(pos: Pos): Boolean = blocks.exists(_.contains(pos))
 
+  def find(pos: Pos): Option[Block] = blocks.find(_.contains(pos))
+
   def add(b: Block): Unit = blocks = b :: blocks
 
 }
