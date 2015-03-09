@@ -12,6 +12,20 @@ class Block extends SImage {
 
   val drawable: TextureDrawable = new TextureDrawable("square.png")
 
+  def this(size: Pos) = {
+    this()
+    this.size = size
+  }
+
+  def this(width: Float, height: Float) = {
+    this(Pos(width, height))
+  }
+
+  def this(position: Pos, size: Pos) = {
+    this(size)
+    this.position = position
+  }
+
 
   def bColor: Color = drawable.color
   def bColor_=(color: Color) = drawable.color = color
