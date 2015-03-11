@@ -58,9 +58,7 @@ public class MyGdxGame extends ApplicationAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        /**cameras modifications, poorly realizes camera modification*/
         camera.position.set(ball.getX() + WIDTH/3,ball.center().y(),0);
-        stage.getViewport().setCamera(camera);
 
         World.draw(batch);
         stage.getViewport().setCamera(camera);
