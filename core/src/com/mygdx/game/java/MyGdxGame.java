@@ -35,7 +35,7 @@ public class MyGdxGame extends ApplicationAdapter {
         img = new Texture("badlogic.jpg");
         ball = new Ball();
 
-        block = new Block(new Pos(0,0), new Pos(220,40));
+        block = new Block(new Pos(0,0), new Pos(220,20));
         World.add(block);
 
         camera = new OrthographicCamera();

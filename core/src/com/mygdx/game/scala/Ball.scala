@@ -64,10 +64,10 @@ class Ball extends SImage {
   def grounded: Boolean = World.contains(position)
 
   def groundCheck: Unit =  {
-    val blockCheck: Option[Block] = World.find(position)
+    val blockCheck: Option[Block] = World.findL(position, speed)
     blockCheck match {
       case Some(block) =>
-        position = Pos(position.x, block.top-1)
+        position = Pos(position.x, block.top)
         speed = Pos(speed.x,0)
       case _ => return
     }
