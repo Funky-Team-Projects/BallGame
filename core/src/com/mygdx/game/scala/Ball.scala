@@ -17,7 +17,7 @@ class Ball extends SImage {
 
   /**Initializing your images*/
 
-  center = Pos(20, 40)
+  center = Pos(20, 50)
   size = Pos(120, 120)
 
   var speed: Pos = Pos(0,0)
@@ -31,7 +31,7 @@ class Ball extends SImage {
 
   outer.color = new Color(1, 0, 0, 1)
   middle.color = new Color(0, 1, 0, 1)
-  inner.color = new Color(0, 0, 1, 1)
+  inner.color = new Color(1, 0, 1, 1)
 
   middle.shift = Pos(8, 8)
   inner.shift = Pos(-4, -4)
@@ -59,12 +59,13 @@ class Ball extends SImage {
 
   def jump: Unit = if (grounded) {
     speed += Pos(0, 20)
+    move
   }
 
   def grounded: Boolean = World.contains(position)
 
   def groundCheck: Unit =  {
-    val blockCheck: Option[Block] = World.findL(position, speed)
+    val blockCheck: Option[Block] = World.findP(position, speed)
     blockCheck match {
       case Some(block) =>
         position = Pos(position.x, block.top)

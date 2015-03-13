@@ -25,13 +25,27 @@ object World {
   def find(pos: Pos): Option[Block] = blocks.find(_.contains(pos))
 
   def findL(start: Pos, change: Pos) = {
-    def step(t: Float): Pos = start - change * t
+    def step(t: Float): Pos = start + change * t
     def met = for (
       t <- 1 until round(change.mod.toFloat);
-      count = change.mod.toFloat / 19f;
+      count = change.mod.toFloat / 10f;
       result <- find(step(1 / count))
     ) yield result
     met.headOption
+
+  }
+
+  def findP(start: Pos, change: Pos) = {
+    def met = for{
+      b <- blocks
+      t1: Float = ((b.position.y + b.size.y) - start.y) / change.y
+      t2: Float = (start.x - b.position.x + change.x*t1)/b.size.x
+      if (t1 <= 1 && t1 >= 0) && (t2 <= 1 && t2 >= 0)
+    } yield b
+
+    if (change.y != 0)
+      met.headOption
+    else None
 
   }
 
