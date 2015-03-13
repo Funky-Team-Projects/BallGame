@@ -59,7 +59,6 @@ class Ball extends SImage {
 
   def jump: Unit = if (grounded) {
     speed += Pos(0, 20)
-    move
   }
 
   def grounded: Boolean = World.contains(position)
