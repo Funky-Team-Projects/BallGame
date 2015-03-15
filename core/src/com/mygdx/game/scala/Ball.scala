@@ -17,10 +17,10 @@ class Ball extends SImage {
 
   /**Initializing your images*/
 
-  center = Pos(20, 50)
+  center = Pos(30, 60)
   size = Pos(120, 120)
 
-  var speed: Pos = Pos(0,0)
+  var speed: Pos = Pos(10,0)
 
   val outer = new TextureDrawable("white.png")
   val middle = new TextureDrawable("white.png")
@@ -50,24 +50,27 @@ class Ball extends SImage {
     middle.rotate(-2)
     inner.rotate(4)
     groundCheck
+    if (position.y < 0)
+      center = Pos(45, 200)
   }
 
   def move: Unit = {
     center += speed
-    if (!grounded) speed += World.acceleration
+    if (!grounded && !glued) speed += World.acceleration
   }
 
   def jump: Unit = if (grounded) {
     speed += Pos(0, 20)
   }
 
-  def grounded: Boolean = World.contains(position)
+  def grounded: Boolean = World.contains(position addX size.x)
+  def glued: Boolean = World.contains(position + size)
 
   def groundCheck: Unit =  {
-    val blockCheck: Option[Block] = World.findP(position, speed)
-    blockCheck match {
-      case Some(block) =>
-        position = Pos(position.x, block.top)
+    val posCheck: Option[Pos] = World.findP(position addX size.x, speed)
+    posCheck match {
+      case Some(pos) =>
+        position = pos addX -size.x
         speed = Pos(speed.x,0)
       case _ => return
     }

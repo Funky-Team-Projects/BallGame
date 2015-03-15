@@ -17,8 +17,8 @@ import com.mygdx.game.scala.World;
 
 public class MyGdxGame extends ApplicationAdapter {
 
-    final int WIDTH = 1200;
-    final int HEIGHT = 900;
+    final int WIDTH = 3200;
+    final int HEIGHT = 1900;
 
 	SpriteBatch batch;
 	Texture img;
@@ -35,11 +35,13 @@ public class MyGdxGame extends ApplicationAdapter {
         img = new Texture("badlogic.jpg");
         ball = new Ball();
 
-        block = new Block(new Pos(0,0), new Pos(220,20));
+        block = new Block(new Pos(0,0), new Pos(1220,40));
         World.add(block);
+        World.add(new Block(new Pos(1320,40), new Pos(1220,40)));
 
         camera = new OrthographicCamera();
         camera.position.set(ball.getX(),ball.getY(),0);
+        camera.zoom = 0.75f;
         viewport = new StretchViewport(WIDTH, HEIGHT, camera);
 
         stage = new Stage(viewport, batch);       /**Creates stage on our viewport with our batch*/
