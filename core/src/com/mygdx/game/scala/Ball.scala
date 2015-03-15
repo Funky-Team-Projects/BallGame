@@ -67,10 +67,16 @@ class Ball extends SImage {
   def glued: Boolean = World.contains(position + size)
 
   def groundCheck: Unit =  {
-    val posCheck: Option[Pos] = World.findP(position addX size.x, speed)
+    val speedCheck = speed.y < 0
+    val posCheck: Option[Pos] =
+      if (speedCheck)
+        World.findP(position addX size.x, speed)
+      else
+        World.findP(position + size, speed, false)
+
     posCheck match {
       case Some(pos) =>
-        position = pos addX -size.x
+        position = if (speedCheck) pos addX  -size.x else pos - size
         speed = Pos(speed.x,0)
       case _ => return
     }

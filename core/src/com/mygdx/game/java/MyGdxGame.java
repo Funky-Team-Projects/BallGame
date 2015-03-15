@@ -38,10 +38,10 @@ public class MyGdxGame extends ApplicationAdapter {
         block = new Block(new Pos(0,0), new Pos(1220,40));
         World.add(block);
         World.add(new Block(new Pos(1320,40), new Pos(1220,40)));
+        World.add(new Block(new Pos(1320,320), new Pos(1220,40)));
 
         camera = new OrthographicCamera();
         camera.position.set(ball.getX(),ball.getY(),0);
-        camera.zoom = 0.75f;
         viewport = new StretchViewport(WIDTH, HEIGHT, camera);
 
         stage = new Stage(viewport, batch);       /**Creates stage on our viewport with our batch*/

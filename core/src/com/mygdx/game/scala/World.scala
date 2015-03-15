@@ -38,9 +38,9 @@ object World {
   def findP(start: Pos, change: Pos, normal: Boolean = true) = {
     def met = for{
       b <- blocks
-      additional: Pos = if (normal) b.size else Pos(0,0)
-      t1: Float = ((b.position.y + additional.y) - start.y) / change.y
-      t2: Float = (start.x - b.position.x + change.x*t1)/additional.x
+      additional = if (normal) b.size.y else 0
+      t1: Float = ((b.position.y + additional) - start.y) / change.y
+      t2: Float = (start.x - b.position.x + change.x*t1)/b.size.x
       if (t1 <= 1 && t1 >= 0) && (t2 <= 1 && t2 >= 0)
     } yield start + change*t1
 
