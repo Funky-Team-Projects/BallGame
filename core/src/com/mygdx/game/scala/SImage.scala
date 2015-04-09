@@ -1,5 +1,6 @@
 package com.mygdx.game.scala
 
+import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 
 /**
@@ -20,5 +21,7 @@ class SImage extends Image {
     setWidth(pos.x)
     setHeight(pos.y)
   }
+
+  def draw(batch: Batch): Unit = draw(batch, 0)
 
 }

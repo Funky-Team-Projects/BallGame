@@ -10,13 +10,30 @@ import scala.collection.immutable.IndexedSeq
 object World {
 
   val acceleration = Pos(0, -1)
+  val hero = new Ball
 
   var blocks: List[Block] = List()
 
   def draw(batch: Batch): Unit = {
     batch.begin()
-    blocks.foreach(_.draw(batch, 0))
+    blocks.foreach(_.draw(batch))
     batch.end()
+  }
+
+  def groundCheck: Unit =  {
+    val speedCheck = hero.speed.y < 0
+    val posCheck: Option[Pos] =
+      if (speedCheck)
+        findP(hero.position addX hero.size.x, hero.speed)
+      else
+        findP(hero.position + hero.size, hero.speed, false)
+
+    posCheck match {
+      case Some(pos) =>
+        hero.position = if (speedCheck) pos addX  -hero.size.x else pos - hero.size
+        hero.speed = Pos(hero.speed.x,0)
+      case _ => return
+    }
   }
 
   /** checks if some of the block contains given position */

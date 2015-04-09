@@ -33,7 +33,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
         img = new Texture("badlogic.jpg");
-        ball = new Ball();
+        ball = World.hero();
 
         block = new Block(new Pos(0,0), new Pos(1220,40));
         World.add(block);

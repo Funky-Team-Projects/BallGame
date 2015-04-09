@@ -49,7 +49,7 @@ class Ball extends SImage {
     move
     middle.rotate(-2)
     inner.rotate(4)
-    groundCheck
+    World.groundCheck
     if (position.y < 0)
       center = Pos(45, 200)
   }
@@ -65,24 +65,6 @@ class Ball extends SImage {
 
   def grounded: Boolean = World.contains(position addX size.x)
   def glued: Boolean = World.contains(position + size)
-
-  def groundCheck: Unit =  {
-    val speedCheck = speed.y < 0
-    val posCheck: Option[Pos] =
-      if (speedCheck)
-        World.findP(position addX size.x, speed)
-      else
-        World.findP(position + size, speed, false)
-
-    posCheck match {
-      case Some(pos) =>
-        position = if (speedCheck) pos addX  -size.x else pos - size
-        speed = Pos(speed.x,0)
-      case _ => return
-    }
-  }
-
-
 
 
 }
