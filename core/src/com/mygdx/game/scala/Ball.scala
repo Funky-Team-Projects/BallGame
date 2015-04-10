@@ -45,13 +45,19 @@ class Ball extends SImage {
 
   }
 
+  def stickTo(pos: Pos):Unit ={
+    position = pos - size
+    speed = Pos(speed.x,0)
+  }
+
+  def groundTo(pos: Pos):Unit ={
+    position = pos.addX(-size.x)
+    speed = Pos(speed.x,0)
+  }
+
   override def act(delta: Float) = {
-    move
     middle.rotate(-2)
     inner.rotate(4)
-    World.groundCheck
-    if (position.y < 0)
-      center = Pos(45, 200)
   }
 
   def move: Unit = {

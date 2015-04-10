@@ -63,6 +63,7 @@ public class MyGdxGame extends ApplicationAdapter {
         camera.position.set(ball.getX() + WIDTH/3,ball.center().y(),0);
 
         World.draw(batch);
+        World.move();
         stage.getViewport().setCamera(camera);
         stage.draw();
         stage.act(Gdx.graphics.getDeltaTime());  /**Calls method acts to all actors*/
