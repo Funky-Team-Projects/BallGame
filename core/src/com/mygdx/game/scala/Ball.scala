@@ -67,13 +67,15 @@ class Ball extends SImage {
 
   }
 
-  def stickTo(pos: Pos):Unit ={
-    position = pos - size
+  def stickTo(pix: SPixel):Unit ={
+    position = pix.position - size
+    colorMatcher(pix.color)
     speed = Pos(speed.x,0)
   }
 
-  def groundTo(pos: Pos):Unit ={
-    position = pos.addX(-size.x)
+  def groundTo(pix: SPixel):Unit ={
+    position = pix.position.addX(-size.x)
+    colorMatcher(pix.color)
     speed = Pos(speed.x,0)
   }
 

@@ -24,7 +24,7 @@ object World {
 
   def move = {
     hero.move
-    distributor()
+    pixelChooser(pixelFinder)
     if (hero.position.y < 0)
       hero.center = respawn
   }
@@ -40,7 +40,7 @@ object World {
     }
   }
 */
-  def distributor(): Unit = {
+  /*def distributor(): Unit = {
     val info: Option[(SPixel, Int)] = pixelChooser(pixelFinder)
     info match {
       case Some((pix, 1)) => {
@@ -55,15 +55,15 @@ object World {
     }
 
   }
+*/
 
-
-  def pixelChooser(posVariants: (Option[SPixel], Option[SPixel])): Option[(SPixel, Int)] =  {
+  def pixelChooser(posVariants: (Option[SPixel], Option[SPixel])): Unit=  {
     //val posCheck: (Option[(Pos], Option[Pos]) = (findP(hero.position addX hero.size.x, hero.speed), findP(hero.position + hero.size, hero.speed, false))
     posVariants match {
-      case (Some(pix),None) => Some((pix, 1))
-      case (None, Some(pix)) => Some((pix,2))
-      case (Some(pix1), Some(pix2)) if (pix1.position - hero.center).mod < (pix2.position - hero.center).mod => Some((pix1,1))
-      case (Some(pix1), Some(pix2)) if (pix1.position - hero.center).mod >= (pix2.position - hero.center).mod => Some((pix2,2))
+      case (Some(pix),None) => hero.groundTo(pix)
+      case (None, Some(pix)) => hero.stickTo(pix)
+      case (Some(pix1), Some(pix2)) if (pix1.position - hero.center).mod < (pix2.position - hero.center).mod => hero.groundTo(pix1)
+      case (Some(pix1), Some(pix2)) if (pix1.position - hero.center).mod >= (pix2.position - hero.center).mod => hero.stickTo(pix2)
       case (None, None) => None
     }
   }
