@@ -31,7 +31,7 @@ class Ball extends SImage {
 
   outer.color = new Color(1, 0, 0, 1)
   middle.color = new Color(0, 1, 0, 1)
-  inner.color = new Color(1, 0, 1, 1)
+  inner.color = new Color(0, 0, 1, 1)
 
   middle.shift = Pos(8, 8)
   inner.shift = Pos(-4, -4)
@@ -42,6 +42,28 @@ class Ball extends SImage {
     outer.drawC(batch, center, size)
     middle.drawC(batch, center, size)
     inner.drawC(batch, center + middle.shift, size)
+
+  }
+
+  def colorMatcher(color: Color): Unit = {
+    def dist(c1: Color, c2: Color) = {
+      (c1.r - c2.r)*(c1.r - c2.r) + (c1.g - c2.g)*(c1.g - c2.g) + (c1.b - c2.b)*(c1.b - c2.b)
+    }
+
+    val out = dist(outer.color, color)
+    val mid = dist(middle.color, color)
+    val inn = dist(inner.color, color)
+
+    if (inn < mid && inn < out) {
+      val temp = outer.color
+      outer.color = inner.color
+      inner.color = temp
+    }
+    if (mid < inn && mid < out) {
+      val temp = outer.color
+      outer.color = middle.color
+      middle.color = temp
+    }
 
   }
 

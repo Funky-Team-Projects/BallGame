@@ -2,6 +2,7 @@ package com.mygdx.game.java;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -35,10 +36,10 @@ public class MyGdxGame extends ApplicationAdapter {
         img = new Texture("badlogic.jpg");
         ball = World.hero();
 
-        block = new Block(new Pos(0,0), new Pos(1220,40));
+        block = new Block(new Pos(0,0), new Pos(1220,40),new Color(0, 0.5f, 0.7f, 1));
         World.add(block);
-        World.add(new Block(new Pos(1320,40), new Pos(1220,40)));
-        World.add(new Block(new Pos(1320,320), new Pos(1220,40)));
+        World.add(new Block(new Pos(1320,40), new Pos(1220,40),new Color(0.2f, 0.8f, 0, 1)));
+        World.add(new Block(new Pos(1320,320), new Pos(1220,40),new Color(0.6f, 0, 0.4f, 1)));
 
         camera = new OrthographicCamera();
         camera.position.set(ball.getX(),ball.getY(),0);

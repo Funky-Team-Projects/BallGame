@@ -26,6 +26,11 @@ class Block extends SImage {
     this.position = position
   }
 
+  def this(position: Pos, size: Pos, color: Color){
+    this(position, size)
+    bColor = color
+  }
+
 
   def bColor: Color = drawable.color
   def bColor_=(color: Color) = drawable.color = color
