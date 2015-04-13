@@ -12,21 +12,23 @@ object World {
 
   val acceleration = Pos(0, -1)
   val hero = new Ball
-  val respawn = Pos(45,200)
+ // val respawn = Pos(45,200)
 
-  var blocks: List[Block] = List()
+  var level: Level = new Level
+
+  def level(level: Level): Unit = {
+    this.level = level
+  }
 
   def draw(batch: Batch): Unit = {
-    batch.begin()
-    blocks.foreach(_.draw(batch))
-    batch.end()
+    level.draw(batch)
   }
 
   def move = {
     hero.move
     pixelChooser(pixelFinder)
     if (hero.position.y < 0)
-      hero.center = respawn
+      hero.center = level.respawn
   }
 
   def pixelFinder: (Option[SPixel], Option[SPixel]) = (findP(hero.position addX hero.size.x, hero.speed), findP(hero.position + hero.size, hero.speed, false))
@@ -58,7 +60,6 @@ object World {
 */
 
   def pixelChooser(posVariants: (Option[SPixel], Option[SPixel])): Unit=  {
-    //val posCheck: (Option[(Pos], Option[Pos]) = (findP(hero.position addX hero.size.x, hero.speed), findP(hero.position + hero.size, hero.speed, false))
     posVariants match {
       case (Some(pix),None) => hero.groundTo(pix)
       case (None, Some(pix)) => hero.stickTo(pix)
@@ -70,10 +71,10 @@ object World {
 
 
   /** checks if some of the block contains given position */
-  def contains(pos: Pos): Boolean = blocks.exists(_.contains(pos))
+  def contains(pos: Pos): Boolean = level.blocks.exists(_.contains(pos))
 
   /**3 ways of finding the ground*/
-  def find(pos: Pos): Option[Block] = blocks.find(_.contains(pos))
+  def find(pos: Pos): Option[Block] = level.blocks.find(_.contains(pos))
 
   def findL(start: Pos, change: Pos) = {
     def step(t: Float): Pos = start + change * t
@@ -88,7 +89,7 @@ object World {
 
   def findP(start: Pos, change: Pos, normal: Boolean = true): Option[SPixel] = {
     def met = for{
-      b <- blocks
+      b <- level.blocks
       additional = if (normal) b.size.y else 0
       t1: Float = ((b.position.y + additional) - start.y) / change.y
       t2: Float = (start.x - b.position.x + change.x*t1)/b.size.x
@@ -101,7 +102,5 @@ object World {
 
   }
   /******************************************/
-
-  def add(b: Block): Unit = blocks = b :: blocks
 
 }

@@ -3,7 +3,6 @@ package com.mygdx.game.java;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.scala.Ball;
 import com.mygdx.game.scala.BallInputProcessor;
 import com.mygdx.game.scala.Block;
+import com.mygdx.game.scala.Level;
 import com.mygdx.game.scala.Pos;
 import com.mygdx.game.scala.World;
 
@@ -29,6 +29,7 @@ public class MyGdxGame extends ApplicationAdapter {
     Block block;
     BallInputProcessor inputProcessor;
     OrthographicCamera camera;
+    Level level;
 
 	@Override
 	public void create () {
@@ -36,10 +37,12 @@ public class MyGdxGame extends ApplicationAdapter {
         img = new Texture("badlogic.jpg");
         ball = World.hero();
 
+        level = new Level(new Pos(45, 200));
         block = new Block(new Pos(0,0), new Pos(1220,40),new Color(0, 0.5f, 0.7f, 1));
-        World.add(block);
-        World.add(new Block(new Pos(1320,40), new Pos(1220,40),new Color(0.2f, 0.8f, 0, 1)));
-        World.add(new Block(new Pos(1320,320), new Pos(1220,40),new Color(0.6f, 0, 0.4f, 1)));
+        level.add(block);
+        level.add(new Block(new Pos(1320,40), new Pos(1220,40),new Color(0.2f, 0.8f, 0, 1)));
+        level.add(new Block(new Pos(1320,320), new Pos(1220,40),new Color(0.6f, 0, 0.4f, 1)));
+        World.level(level);
 
         camera = new OrthographicCamera();
         camera.position.set(ball.getX(),ball.getY(),0);
@@ -58,8 +61,8 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void render () {
 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+     //   Gdx.gl.glClearColor(0, 0, 0, 1);
+	//	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.position.set(ball.getX() + WIDTH/3,ball.center().y(),0);
 
