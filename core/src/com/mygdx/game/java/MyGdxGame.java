@@ -40,8 +40,8 @@ public class MyGdxGame extends ApplicationAdapter {
         level = new Level(new Pos(45, 200));
         block = new Block(new Pos(0,0), new Pos(1220,40),new Color(0, 0.5f, 0.7f, 1));
         level.add(block);
-        level.add(new Block(new Pos(1320,40), new Pos(1220,40),new Color(0.2f, 0.8f, 0, 1)));
-        level.add(new Block(new Pos(1320,320), new Pos(1220,40),new Color(0.6f, 0, 0.4f, 1)));
+        level.add(new Block(new Pos(1440,50), new Pos(1220,40),new Color(0.2f, 0.8f, 0, 1)));
+        level.add(new Block(new Pos(2440,350), new Pos(1220,40),new Color(0.6f, 0, 0.4f, 1)));
         World.level(level);
 
         camera = new OrthographicCamera();
