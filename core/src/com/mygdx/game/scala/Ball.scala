@@ -17,58 +17,36 @@ class Ball extends SImage {
 
   /**Initializing your images*/
 
-  center = Pos(30, 60)
-  size = Pos(120, 120)
+  val outer = new Bagel
+  val middle = new Bagel
+  val inner = new Bagel
 
   var speed: Pos = Pos(10,0)
 
-  val outer = new TextureDrawable("ball.png")
-  val outerBack = new TextureDrawable("ball.png")
-
-  val middle = new TextureDrawable("ball.png")
-  val middleBack = new TextureDrawable("ball.png")
-
-  val inner = new TextureDrawable("ball.png")
-  val innerBack = new TextureDrawable("ball.png")
-
-  outerBack.scale = Pos(0.8f, 0.8f)
-  middleBack.scale = Pos(0.4f, 0.4f)
-  innerBack.scale = Pos(0.2f, 0.2f)
+  center = Pos(30, 60)
+  size = Pos(120, 120)
 
   middle.scale = Pos(0.5f, 0.5f)
   inner.scale = Pos(0.25f, 0.25f)
 
-  outerBack.color = new Color(0, 0, 0, 1)
-  middleBack.color = new Color(0, 0, 0, 1)
-  innerBack.color = new Color(0, 0, 0, 1)
+  outer.circle.color = new Color(1, 0, 0, 1)
+  middle.circle.color = new Color(0, 1, 0, 1)
+  inner.circle.color = new Color(0, 0, 1, 1)
 
-  outer.color = new Color(1, 0, 0, 1f)
-  middle.color = new Color(0, 1, 0, 1f)
-  inner.color = new Color(0, 0, 1, 1)
-
-
-  def shift(first: TextureDrawable, second: TextureDrawable, size: Pos): Pos ={
-    Pos(((first.scale - second.scale)*size/2.0f).x,0)
+  def shiftCalc(first: Bagel, second: Bagel, size: Pos): Pos ={
+    Pos(((first.scale*first.thick - second.scale)*size/2.0f).x,0)
   }
 
-  middle.shift = shift(outerBack, middle, size)
-  inner.shift = shift(middleBack, inner, size)
-
-  middleBack.shift = middle.shift
-  innerBack.shift = inner.shift
-
+  middle.shift = shiftCalc(outer, middle, size)
+  inner.shift = shiftCalc(middle, inner, size)
 
   override def draw(batch: Batch, parentAlpha: Float) = {
     /**Drawing Psychedelic circle*/
-    outer.drawC(batch, center, size)
-    outerBack.drawC(batch, center, size)
+    outer.draw(batch, center, size)
 
-    middle.drawC(batch, center, size)
-    middleBack.drawC(batch, center, size)
+    middle.draw(batch, center, size)
 
-    inner.drawC(batch, center + middle.shift, size)
-    innerBack.drawC(batch, center + middle.shift, size)
-
+    inner.draw(batch, center + middle.shift, size)
   }
 
   def colorMatcher(color: Color): Unit = {
@@ -76,19 +54,19 @@ class Ball extends SImage {
       (c1.r - c2.r)*(c1.r - c2.r) + (c1.g - c2.g)*(c1.g - c2.g) + (c1.b - c2.b)*(c1.b - c2.b)
     }
 
-    val out = dist(outer.color, color)
-    val mid = dist(middle.color, color)
-    val inn = dist(inner.color, color)
+    val out = dist(outer.circle.color, color)
+    val mid = dist(middle.circle.color, color)
+    val inn = dist(inner.circle.color, color)
 
     if (inn < mid && inn < out) {
-      val temp = outer.color
-      outer.color = inner.color
-      inner.color = temp
+      val temp = outer.circle.color
+      outer.circle.color = inner.circle.color
+      inner.circle.color = temp
     }
     if (mid < inn && mid < out) {
-      val temp = outer.color
-      outer.color = middle.color
-      middle.color = temp
+      val temp = outer.circle.color
+      outer.circle.color = middle.circle.color
+      middle.circle.color = temp
     }
 
   }
@@ -107,9 +85,7 @@ class Ball extends SImage {
 
   override def act(delta: Float) = {
     middle.rotate(-2)
-    middleBack.rotate(-2)
     inner.rotate(4)
-    innerBack.rotate(4)
   }
 
   def move: Unit = {
