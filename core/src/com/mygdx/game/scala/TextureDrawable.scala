@@ -2,7 +2,6 @@ package com.mygdx.game.scala
 
 import com.badlogic.gdx.graphics.{Color, Texture}
 import com.badlogic.gdx.graphics.g2d.{Batch, TextureRegion}
-import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 
 /**

@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.g2d.{TextureRegion, Batch}
  */
 class Ball extends SImage {
 
-  /**Initializing your images*/
-
   val outer = new Bagel
   val middle = new Bagel
   val inner = new Bagel
@@ -80,8 +78,10 @@ class Ball extends SImage {
       middle.thick = thick
     }
 
-    middle.shift = shiftCalc(outer, middle, size)
-    inner.shift = shiftCalc(middle, inner, size)
+    shiftChange(middle, -middle.shift.mod - shiftCalc(outer, middle, size).x)
+    shiftChange(inner, -inner.shift.mod - shiftCalc(middle, inner, size).x)
+
+
     colorDiff = Math.sqrt(colorDiff).toFloat / 100
   }
 
@@ -90,10 +90,10 @@ class Ball extends SImage {
 
   }
 
-  def shiftChange(s: Float): Unit = {
-    val r = middle.shift.mod
+  def shiftChange(b: Bagel, s: Float): Unit = {
+    val r = b.shift.mod
 
-    middle.shift *= (r+s)/r
+    b.shift *= (r+s)/r
 
   }
 
@@ -118,7 +118,7 @@ class Ball extends SImage {
     center += speed
     if (grounded || glued) {
       thickChange(-Pos(colorDiff, colorDiff).mod * 2)
-      shiftChange(colorDiff)
+      shiftChange(middle, colorDiff)
     }
     if (!grounded && !glued) speed += World.acceleration
   }

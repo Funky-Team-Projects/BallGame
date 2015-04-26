@@ -1,9 +1,8 @@
 package com.mygdx.game.scala
 
-import com.badlogic.gdx.graphics.Color
+
 import com.badlogic.gdx.graphics.g2d.{SpriteBatch, Batch}
 import math.round
-import scala.collection.immutable.IndexedSeq
 
 /**
  * Created by Denis on 07-Mar-15.
