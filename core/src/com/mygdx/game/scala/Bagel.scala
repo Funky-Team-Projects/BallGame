@@ -34,6 +34,8 @@ class Bagel {
   }
 
 
+
+
   def draw(batch: Batch, position: Pos, size: Pos): Unit = {
     circle.drawC(batch, position, size)
     back.drawC(batch, position, size*(Pos(1,1) - thick))

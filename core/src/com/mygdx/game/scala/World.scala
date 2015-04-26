@@ -32,32 +32,6 @@ object World {
   }
 
   def pixelFinder: (Option[SPixel], Option[SPixel]) = (findP(hero.position addX hero.size.x, hero.speed), findP(hero.position + hero.size, hero.speed, false))
-/*
-  def posGetter(pix: (Option[SPixel], Option[SPixel])): (Option[Pos], Option[Pos]) = {
-    pix match{
-      case (Some(SPixel(pos1, col1)), Some(SPixel(pos2, col2))) => (Some(pos1), Some(pos2))
-      case (Some(SPixel(pos1, col1)), None) => (Some(pos1), None)
-      case (None, Some(SPixel(pos1, col1))) => (None, Some(pos1))
-      case (None, None) => (None, None)
-    }
-  }
-*/
-  /*def distributor(): Unit = {
-    val info: Option[(SPixel, Int)] = pixelChooser(pixelFinder)
-    info match {
-      case Some((pix, 1)) => {
-        hero.groundTo(pix.position)
-        hero.colorMatcher(pix.color)
-      }
-      case Some((pix, 2)) => {
-        hero.stickTo(pix.position)
-        hero.colorMatcher(pix.color)
-      }
-      case None =>
-    }
-
-  }
-*/
 
   def pixelChooser(posVariants: (Option[SPixel], Option[SPixel])): Unit=  {
     posVariants match {
