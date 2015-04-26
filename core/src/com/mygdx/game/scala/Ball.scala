@@ -27,12 +27,12 @@ class Ball extends SImage {
   middle.circle.color = new Color(0, 1, 0, 1)
   inner.circle.color = new Color(0, 0, 1, 1)
 
-  def shiftCalc(first: Bagel, second: Bagel, size: Pos): Pos ={
-    Pos(((first.scale*first.thick - second.scale)*size/2.0f).x,0)
+  def shiftCalc(first: Bagel, second: Bagel, size: Pos): Float ={
+    (first.scale.x*first.thick.x - second.scale.x)*size.x/2.0f
   }
 
-  middle.shift = shiftCalc(outer, middle, size)
-  inner.shift = shiftCalc(middle, inner, size)
+  middle.shift = Pos(shiftCalc(outer, middle, size),0)
+  inner.shift = Pos(shiftCalc(middle, inner, size),0)
 
   override def draw(batch: Batch, parentAlpha: Float) = {
     /**Drawing Psychedelic circle*/
@@ -78,8 +78,8 @@ class Ball extends SImage {
       middle.thick = thick
     }
 
-    shiftChange(middle, -middle.shift.mod - shiftCalc(outer, middle, size).x)
-    shiftChange(inner, -inner.shift.mod - shiftCalc(middle, inner, size).x)
+    shiftChange(middle, -middle.shift.mod - shiftCalc(outer, middle, size))
+    shiftChange(inner, -inner.shift.mod - shiftCalc(middle, inner, size))
 
 
     colorDiff = Math.sqrt(colorDiff).toFloat / 100
