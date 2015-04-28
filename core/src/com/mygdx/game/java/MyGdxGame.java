@@ -37,11 +37,13 @@ public class MyGdxGame extends ApplicationAdapter {
         img = new Texture("badlogic.jpg");
         ball = World.hero();
 
-        level = new Level(new Pos(45, 200));
-        block = new Block(new Pos(0,0), new Pos(1220,40),new Color(0, 0.5f, 0.7f, 1));
+        level = new Level(new Pos(130, 5060));
+        block = new Block(new Pos(450,0), new Pos(40, 1220),new Color(0, 0.5f, 0.7f, 1));
         level.add(block);
-        level.add(new Block(new Pos(1440,50), new Pos(1220,40),new Color(0.2f, 0.8f, 0, 1)));
-        level.add(new Block(new Pos(2440,350), new Pos(1220,40),new Color(0.6f, 0, 0.4f, 1)));
+        level.add(new Block(new Pos(50,1440), new Pos(40,1220),new Color(0.2f, 0.8f, 0, 1)));
+        level.add(new Block(new Pos(350,1640), new Pos(40,1220),new Color(0.6f, 0, 0.4f, 1)));
+        level.add(new Block(new Pos(50,2840), new Pos(40,1220),new Color(0.51f, 0.49f, 0f, 1)));
+        level.add(new Block(new Pos(250,3840), new Pos(40,1220),new Color(0.49f, 0.51f, 0f, 1)));
         World.level(level);
 
         camera = new OrthographicCamera();
@@ -64,7 +66,7 @@ public class MyGdxGame extends ApplicationAdapter {
      //   Gdx.gl.glClearColor(0, 0, 0, 1);
 	//	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.position.set(ball.getX() + WIDTH/3,ball.center().y(),0);
+        camera.position.set(ball.position().x(),ball.position().y()  - HEIGHT/3,0);
 
         World.draw(batch);
         World.move();

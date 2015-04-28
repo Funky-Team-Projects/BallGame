@@ -15,9 +15,9 @@ class Ball extends SImage {
   val inner = new Bagel
 
   var colorDiff: Float = 0
-  var speed: Pos = Pos(10,0)
+  var speed: Pos = Pos(0,-10)
 
-  center = Pos(30, 60)
+  center = Pos(130, 5060)
   size = Pos(120, 120)
 
   middle.scale = Pos(0.5f, 0.5f)
@@ -82,11 +82,11 @@ class Ball extends SImage {
     shiftChange(inner, -inner.shift.mod - shiftCalc(middle, inner, size))
 
 
-    colorDiff = Math.sqrt(colorDiff).toFloat / 100
+    colorDiff = Math.sqrt(colorDiff).toFloat / 50
   }
 
-  def thickChange(t: Float): Unit = {
-    outer.thick += Pos(t, t) / outer.scale / size
+  def thickChange(b: Bagel, t: Float): Unit = {
+    b.thick += Pos(t, t) / b.scale / size
 
   }
 
@@ -98,15 +98,15 @@ class Ball extends SImage {
   }
 
   def stickTo(pix: SPixel):Unit ={
-    position = pix.position - size
+    position = pix.position addX -size.x
     colorMatcher(pix.color)
-    speed = Pos(speed.x,0)
+    speed = Pos(0,speed.y)
   }
 
   def groundTo(pix: SPixel):Unit ={
-    position = pix.position.addX(-size.x)
+    position = pix.position
     colorMatcher(pix.color)
-    speed = Pos(speed.x,0)
+    speed = Pos(0, speed.y)
   }
 
   override def act(delta: Float) = {
@@ -115,20 +115,28 @@ class Ball extends SImage {
   }
 
   def move: Unit = {
+    if (!World.contains(position + speed) && !World.contains(position + speed addX size.x)) jump
     center += speed
     if (grounded || glued) {
-      thickChange(-Pos(colorDiff, colorDiff).mod * 2)
+      if (outer.thick.x > 0) thickChange(outer, -Pos(colorDiff, colorDiff).mod * 2)
+      if (middle.thick.x < 0.2f) {
+        thickChange(middle, Pos(0.001f, 0.001f).mod*2)
+        shiftChange(inner, -0.001f)
+      }
+      if (inner.thick.x < 0.2f) thickChange(inner, 0.001f)
       shiftChange(middle, colorDiff)
     }
     if (!grounded && !glued) speed += World.acceleration
+
   }
 
   def jump: Unit = if (grounded) {
-    speed += Pos(0, 20)
-  }
+    speed += Pos(-10, 0)
+  } else if (glued) speed += Pos(10, 0)
 
-  def grounded: Boolean = World.contains(position addX size.x/2)
-  def glued: Boolean = World.contains(position + size*Pos(0.5f, 1))
+
+  def grounded: Boolean = World.contains(center addX size.x/2)
+  def glued: Boolean = World.contains(center addX -size.x/2)
 
 
 }
