@@ -117,13 +117,18 @@ class Ball extends SImage {
   def move: Unit = {
     if (!World.contains(position + speed) && !World.contains(position + speed addX size.x)) jump
     center += speed
+    if (outer.thick.x < 0.2f) {
+      thickChange(outer, Pos(0.001f, 0.001f).mod*2)
+      shiftChange(middle, -0.001f)
+    }
+    if (middle.thick.x < 0.2f) {
+      thickChange(middle, Pos(0.001f, 0.001f).mod*2)
+      shiftChange(inner, -0.001f)
+    }
+    if (inner.thick.x < 0.2f) thickChange(inner, 0.001f)
     if (grounded || glued) {
       if (outer.thick.x > 0) thickChange(outer, -Pos(colorDiff, colorDiff).mod * 2)
-      if (middle.thick.x < 0.2f) {
-        thickChange(middle, Pos(0.001f, 0.001f).mod*2)
-        shiftChange(inner, -0.001f)
-      }
-      if (inner.thick.x < 0.2f) thickChange(inner, 0.001f)
+
       shiftChange(middle, colorDiff)
     }
     if (!grounded && !glued) speed += World.acceleration

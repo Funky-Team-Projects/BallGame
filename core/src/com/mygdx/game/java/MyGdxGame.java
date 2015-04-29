@@ -37,12 +37,12 @@ public class MyGdxGame extends ApplicationAdapter {
         img = new Texture("badlogic.jpg");
         ball = World.hero();
 
-        level = new Level(new Pos(130, 5060));
+        level = new Level(new Pos(190, 5060));
         block = new Block(new Pos(450,0), new Pos(40, 1220),new Color(0, 0.5f, 0.7f, 1));
         level.add(block);
-        level.add(new Block(new Pos(50,1440), new Pos(40,1220),new Color(0.2f, 0.8f, 0, 1)));
+        level.add(new Block(new Pos(0,1440), new Pos(40,1220),new Color(0.2f, 0.8f, 0, 1)));
         level.add(new Block(new Pos(350,1640), new Pos(40,1220),new Color(0.6f, 0, 0.4f, 1)));
-        level.add(new Block(new Pos(50,2840), new Pos(40,1220),new Color(0.51f, 0.49f, 0f, 1)));
+        level.add(new Block(new Pos(0,2840), new Pos(40,1220),new Color(0.51f, 0.49f, 0f, 1)));
         level.add(new Block(new Pos(250,3840), new Pos(40,1220),new Color(0.49f, 0.51f, 0f, 1)));
         World.level(level);
 
