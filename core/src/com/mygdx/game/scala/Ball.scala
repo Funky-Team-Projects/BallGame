@@ -18,27 +18,14 @@ class Ball extends SImage {
   var colorDiff: Float = 0
   var speed: Pos = Pos(10, 0)
 
-  var lastBagel: Bagel = _
-  var bagels: List[Bagel] = prepareBagels
-
+  var lastBagel: Bagel = new Bagel
+  var bagels: List[Bagel] = List(lastBagel)
+  
+  add(new Bagel)
+  add(new Bagel)
 
   def shiftCalc(first: Bagel, second: Bagel): Float ={
     (first.scale.x*(1.0f-first.thick.x) - second.scale.x)*size.x/2.0f
-  }
-
-  def prepareBagels: List[Bagel] = {
-    val outer = new Bagel
-    val middle = new Bagel
-    val inner = new Bagel
-
-    middle.scale = step
-    inner.scale = step*step
-
-    middle.shift = Pos(shiftCalc(outer, middle),0)
-    inner.shift = Pos(shiftCalc(middle, inner),0)
-
-    lastBagel = inner
-    outer :: middle :: inner :: List()
   }
 
   override def draw(batch: Batch, parentAlpha: Float) = {
