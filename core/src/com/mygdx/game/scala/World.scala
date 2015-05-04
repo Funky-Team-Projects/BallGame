@@ -9,7 +9,7 @@ import math.round
  */
 object World {
 
-  val acceleration = Pos(0, 0)
+  val acceleration = Pos(0, -1)
   val hero = new Ball
  // val respawn = Pos(45,200)
 
@@ -25,14 +25,26 @@ object World {
 
   def move = {
     if (hero.position.y < 0) {
-      hero.speed = Pos(0, -10)
+      hero.speed = Pos(10, 0)
       hero.center = level.respawn
     }
     hero.move
+    presentCheck
     pixelChooser(pixelFinder)
   }
 
-  def pixelFinder: (Option[SPixel], Option[SPixel]) = (findP(hero.position, hero.speed), findP(hero.position addX hero.size.x, hero.speed, false))
+  def presentCheck: Unit = {
+    val present = level.presents.find(_.contains(hero.position + Pos(1, 0.5f)*hero.size))
+    present match {
+      case Some(p) => {
+        level.remove(p)
+        hero.gift(p)
+      }
+      case _ =>
+    }
+  }
+
+  def pixelFinder: (Option[SPixel], Option[SPixel]) = (findP(hero.position addX hero.size.x, hero.speed), findP(hero.position + hero.size, hero.speed, false))
 
   def pixelChooser(posVariants: (Option[SPixel], Option[SPixel])): Unit=  {
     posVariants match {
@@ -65,13 +77,13 @@ object World {
   def findP(start: Pos, change: Pos, normal: Boolean = true): Option[SPixel] = {
     def met = for{
       b <- level.blocks
-      additional = if (normal) b.size.x else 0
-      t1: Float = ((b.position.x + additional) - start.x) / change.x
-      t2: Float = (start.y - b.position.y + change.y*t1)/b.size.y
+      additional = if (normal) b.size.y else 0
+      t1: Float = ((b.position.y + additional) - start.y) / change.y
+      t2: Float = (start.x - b.position.x + change.x*t1)/b.size.x
       if (t1 <= 1 && t1 >= 0) && (t2 <= 1 && t2 >= 0)
     } yield SPixel(start + change*t1, b.bColor)
 
-    if (change.x != 0)
+    if (change.y != 0)
       met.headOption
     else None
 

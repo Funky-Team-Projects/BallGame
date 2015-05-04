@@ -43,8 +43,8 @@ class Block extends SImage {
 
   /**check if this block contains given position*/
   def contains(pos: Pos): Boolean =
-    (pos.x >= position.x && pos.x <= position.x + size.x) &&
-    (pos.y >= position.y && pos.y <= position.y + size.y)
+    (position.x <= pos.x && pos.x <= position.x + size.x) &&
+    (position.y <= pos.y && pos.y <= position.y + size.y)
 
 
 }

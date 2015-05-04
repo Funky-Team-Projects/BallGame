@@ -10,40 +10,49 @@ import com.badlogic.gdx.graphics.g2d.{TextureRegion, Batch}
  */
 class Ball extends SImage {
 
-  val outer = new Bagel
-  val middle = new Bagel
-  val inner = new Bagel
-
-  var colorDiff: Float = 0
-  var speed: Pos = Pos(0,-10)
-
-  center = Pos(130, 5060)
+  center = Pos(30, 60)
   size = Pos(120, 120)
 
-  middle.scale = Pos(0.5f, 0.5f)
-  inner.scale = Pos(0.25f, 0.25f)
+  val step: Pos = Pos(0.65f, 0.65f)
 
-  outer.circle.color = new Color(1, 0, 0, 1)
-  middle.circle.color = new Color(0, 1, 0, 1)
-  inner.circle.color = new Color(0, 0, 1, 1)
+  var colorDiff: Float = 0
+  var speed: Pos = Pos(10, 0)
 
-  def shiftCalc(first: Bagel, second: Bagel, size: Pos): Float ={
-    (first.scale.x*first.thick.x - second.scale.x)*size.x/2.0f
+  var lastBagel: Bagel = _
+  var bagels: List[Bagel] = prepareBagels
+
+
+  def shiftCalc(first: Bagel, second: Bagel): Float ={
+    (first.scale.x*(1.0f-first.thick.x) - second.scale.x)*size.x/2.0f
   }
 
-  middle.shift = Pos(shiftCalc(outer, middle, size),0)
-  inner.shift = Pos(shiftCalc(middle, inner, size),0)
+  def prepareBagels: List[Bagel] = {
+    val outer = new Bagel
+    val middle = new Bagel
+    val inner = new Bagel
+
+    middle.scale = step
+    inner.scale = step*step
+
+    middle.shift = Pos(shiftCalc(outer, middle),0)
+    inner.shift = Pos(shiftCalc(middle, inner),0)
+
+    lastBagel = inner
+    outer :: middle :: inner :: List()
+  }
 
   override def draw(batch: Batch, parentAlpha: Float) = {
     /**Drawing Psychedelic circle*/
-    outer.draw(batch, center, size)
 
-    middle.draw(batch, center, size)
-
-    inner.draw(batch, center + middle.shift, size)
+    bagels.foldLeft(Pos(0,0)) { (shift, bagel) => {
+        bagel.draw(batch, center + shift, size)
+        shift + bagel.shift
+      }
+    }
   }
 
   def colorMatcher(color: Color): Unit = {
+    /*
     def dist(c1: Color, c2: Color) = {
       (c1.r - c2.r)*(c1.r - c2.r) + (c1.g - c2.g)*(c1.g - c2.g) + (c1.b - c2.b)*(c1.b - c2.b)
     }
@@ -80,9 +89,37 @@ class Ball extends SImage {
 
     shiftChange(middle, -middle.shift.mod - shiftCalc(outer, middle, size))
     shiftChange(inner, -inner.shift.mod - shiftCalc(middle, inner, size))
+*/
+    if (bagels.head.circle.color != color) {
+      val coloredBagel: Option[Bagel] = bagels.tail.find(b => b.circle.color == color)
+      coloredBagel match {
+        case Some(b) => {
+          val color = bagels.head.circle.color
+          //  val thick = outer.thick
 
+          bagels.head.circle.color = b.circle.color
+          //  outer.thick = inner.thick
 
-    colorDiff = Math.sqrt(colorDiff).toFloat / 50
+          b.circle.color = color
+          //  inner.thick = thick
+        }
+        case _ => {
+          val optionBagel: Option[Bagel] = bagels.tail.find(b => b.circle.color == Color.WHITE)
+          optionBagel match {
+            case Some(bagel) => {
+              bagel.circle.color = bagels.head.circle.color
+              bagels.head.circle.color = color
+
+              /*   val thick = bagel.thick
+          bagel.thick = bagels.head.thick
+          bagels.head.thick = thick*/
+            }
+            case None => bagels.head.circle.color = color
+          }
+        }
+      }
+     // colorDiff = Math.sqrt(colorDiff).toFloat / 50
+    }
   }
 
   def thickChange(b: Bagel, t: Float): Unit = {
@@ -98,25 +135,45 @@ class Ball extends SImage {
   }
 
   def stickTo(pix: SPixel):Unit ={
-    position = pix.position addX -size.x
+    position = pix.position - size
     colorMatcher(pix.color)
-    speed = Pos(0,speed.y)
+    speed = Pos(speed.x,0)
   }
 
   def groundTo(pix: SPixel):Unit ={
-    position = pix.position
+    position = pix.position addX -size.x
     colorMatcher(pix.color)
-    speed = Pos(0, speed.y)
+    speed = Pos(speed.x,0)
   }
 
   override def act(delta: Float) = {
-    middle.rotate(-2)
-    inner.rotate(4)
+    bagels.tail.foldLeft(-2){
+      (r, bagel) => {
+        bagel.rotate(r)
+        -r*2
+      }
+    }
   }
 
+  def gift(box: PresentBox) = {
+    box.present match {
+      case b: Bagel => add(b)
+      case _ =>
+    }
+  }
+
+  def add(b: Bagel) = {
+    b.scale = lastBagel.scale*step
+    b.shift = Pos(shiftCalc(lastBagel, b),0)
+    lastBagel = b
+    bagels = bagels ++ List(b)
+  }
+
+
   def move: Unit = {
-    if (!World.contains(position + speed) && !World.contains(position + speed addX size.x)) jump
+    if (!World.contains(position + speed addX size.x) && !World.contains(position + speed + size)) jump
     center += speed
+/*
     if (outer.thick.x < 0.2f) {
       thickChange(outer, Pos(0.001f, 0.001f).mod*2)
       shiftChange(middle, -0.001f)
@@ -131,17 +188,18 @@ class Ball extends SImage {
 
       shiftChange(middle, colorDiff)
     }
+    */
     if (!grounded && !glued) speed += World.acceleration
 
   }
 
   def jump: Unit = if (grounded) {
-    speed += Pos(-10, 0)
-  } else if (glued) speed += Pos(10, 0)
+    speed += Pos(0, 20)
+  } else if (glued) speed += Pos(0, -1)
 
 
-  def grounded: Boolean = World.contains(center addX size.x/2)
-  def glued: Boolean = World.contains(center addX -size.x/2)
+  def grounded: Boolean = World.contains(position addX size.x)
+  def glued: Boolean = World.contains(position + size)
 
 
 }

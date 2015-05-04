@@ -14,6 +14,7 @@ import com.mygdx.game.scala.BallInputProcessor;
 import com.mygdx.game.scala.Block;
 import com.mygdx.game.scala.Level;
 import com.mygdx.game.scala.Pos;
+import com.mygdx.game.scala.PresentBox;
 import com.mygdx.game.scala.World;
 
 public class MyGdxGame extends ApplicationAdapter {
@@ -37,14 +38,17 @@ public class MyGdxGame extends ApplicationAdapter {
         img = new Texture("badlogic.jpg");
         ball = World.hero();
 
-        level = new Level(new Pos(190, 5060));
-        block = new Block(new Pos(450,0), new Pos(40, 1220),new Color(0, 0.5f, 0.7f, 1));
+        level = new Level(new Pos(90, 120));
+        block = new Block(new Pos(0,0), new Pos(1220, 40),new Color(0, 0.5f, 0.7f, 1));
         level.add(block);
-        level.add(new Block(new Pos(0,1440), new Pos(40,1220),new Color(0.2f, 0.8f, 0, 1)));
-        level.add(new Block(new Pos(350,1640), new Pos(40,1220),new Color(0.6f, 0, 0.4f, 1)));
-        level.add(new Block(new Pos(0,2840), new Pos(40,1220),new Color(0.51f, 0.49f, 0f, 1)));
-        level.add(new Block(new Pos(250,3840), new Pos(40,1220),new Color(0.49f, 0.51f, 0f, 1)));
+        level.add(new Block(new Pos(1440,0), new Pos(1220, 40),new Color(0.2f, 0.8f, 0, 1)));
+        level.add(new Block(new Pos(1640,350), new Pos(1220, 40),new Color(0.6f, 0, 0.4f, 1)));
+        level.add(new Block(new Pos(2840, 0), new Pos(1220, 40),new Color(0.51f, 0.49f, 0f, 1)));
+        level.add(new Block(new Pos(3840, 250), new Pos(1220, 40),new Color(0.49f, 0.51f, 0f, 1)));
         World.level(level);
+
+        level.add(new PresentBox(new Pos(1940,100), new Pos(100, 100)));
+        level.add(new PresentBox(new Pos(4000,150), new Pos(100, 100)));
 
         camera = new OrthographicCamera();
         camera.position.set(ball.getX(),ball.getY(),0);
@@ -66,7 +70,7 @@ public class MyGdxGame extends ApplicationAdapter {
      //   Gdx.gl.glClearColor(0, 0, 0, 1);
 	//	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.position.set(ball.position().x(),ball.position().y()  - HEIGHT/3,0);
+        camera.position.set(ball.position().x() + WIDTH/3,ball.position().y(), 0);
 
         World.draw(batch);
         World.move();

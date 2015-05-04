@@ -15,8 +15,11 @@ class Level(val respawn: Pos) {
 
   var background: Color = new Color(0, 0, 0, 1)
   var blocks: List[Block] = List()
+  var presents: List[PresentBox] = List()
 
   def add(b: Block): Unit = blocks = b :: blocks
+  def add(p: PresentBox): Unit = presents = p :: presents
+  def remove(p: PresentBox): Unit = presents = presents.filter(pr => pr != p)
 
   def draw(batch: Batch): Unit ={
 
@@ -25,6 +28,7 @@ class Level(val respawn: Pos) {
 
     batch.begin()
     blocks.foreach(_.draw(batch))
+    presents.foreach(_.draw(batch))
     batch.end()
   }
 

@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch
 /**
  * Created by Denis on 22-Apr-15.
  */
-class Bagel {
+class Bagel extends SDrawable{
 
   val circle = new TextureDrawable("ball.png")
   val back = new TextureDrawable("ball.png")
@@ -32,8 +32,6 @@ class Bagel {
     circle.rotate(degree)
     back.rotate(degree)
   }
-
-
 
 
   def draw(batch: Batch, position: Pos, size: Pos): Unit = {
