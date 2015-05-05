@@ -3,10 +3,12 @@ package com.mygdx.game.scala
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 
+
 /**
  * Created by Denis on 08-Mar-15.
  */
 class SImage extends Image {
+
   def center: Pos = position + size / 2
   def center_=(pos: Pos): Unit = {  position = pos - size / 2 }
 

@@ -24,9 +24,15 @@ object World {
   }
 
   def move = {
-    if (hero.position.y < 0) {
+    if (hero.position.y < -200) {
       hero.speed = Pos(10, 0)
       hero.center = level.respawn
+      if (hero.alone) {
+        hero.add(new Bagel)
+        hero.add(new Bagel)
+        hero.add(new Bagel)
+        hero.add(new Bagel)
+      }
     }
     hero.move
     presentCheck
@@ -34,7 +40,7 @@ object World {
   }
 
   def presentCheck: Unit = {
-    val present = level.presents.find(_.contains(hero.position + Pos(1, 0.5f)*hero.size))
+    val present = level.presents.find(x => x.contains(hero.position + hero.size) || x.contains(hero.position addX hero.size.x))
     present match {
       case Some(p) => {
         level.remove(p)

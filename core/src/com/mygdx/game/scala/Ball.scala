@@ -13,14 +13,14 @@ class Ball extends SImage {
   center = Pos(30, 60)
   size = Pos(120, 120)
 
-  val step: Pos = Pos(0.65f, 0.65f)
+  val step: Pos = Pos(0.68f, 0.68f)
 
   var colorDiff: Float = 0
   var speed: Pos = Pos(10, 0)
 
   var lastBagel: Bagel = new Bagel
   var bagels: List[Bagel] = List(lastBagel)
-  
+
   add(new Bagel)
   add(new Bagel)
 
@@ -78,7 +78,7 @@ class Ball extends SImage {
     shiftChange(inner, -inner.shift.mod - shiftCalc(middle, inner, size))
 */
     if (bagels.head.circle.color != color) {
-      val coloredBagel: Option[Bagel] = bagels.tail.find(b => b.circle.color == color)
+      val coloredBagel: Option[Bagel] = bagels.find(b => b.circle.color == color)
       coloredBagel match {
         case Some(b) => {
           val color = bagels.head.circle.color
@@ -91,7 +91,7 @@ class Ball extends SImage {
           //  inner.thick = thick
         }
         case _ => {
-          val optionBagel: Option[Bagel] = bagels.tail.find(b => b.circle.color == Color.WHITE)
+          val optionBagel: Option[Bagel] = bagels.find(b => b.circle.color == Color.WHITE)
           optionBagel match {
             case Some(bagel) => {
               bagel.circle.color = bagels.head.circle.color
@@ -101,12 +101,27 @@ class Ball extends SImage {
           bagel.thick = bagels.head.thick
           bagels.head.thick = thick*/
             }
-            case None => bagels.head.circle.color = color
+            case None => {
+              kill(color)
+              if (!alone)
+                colorMatcher(color)
+            }
           }
         }
       }
      // colorDiff = Math.sqrt(colorDiff).toFloat / 50
     }
+  }
+
+  def kill(color: Color): Unit = {
+    if (!alone) {
+      val bagelTail = bagels.reverse.tail
+      lastBagel = bagelTail.head
+      lastBagel.circle.color = color
+      bagels = bagelTail.reverse
+
+    }
+
   }
 
   def thickChange(b: Bagel, t: Float): Unit = {
@@ -134,10 +149,10 @@ class Ball extends SImage {
   }
 
   override def act(delta: Float) = {
-    bagels.tail.foldLeft(-2){
+    bagels.tail.foldLeft(-2.0f){
       (r, bagel) => {
         bagel.rotate(r)
-        -r*2
+        -r*1.5f
       }
     }
   }
@@ -152,13 +167,15 @@ class Ball extends SImage {
   def add(b: Bagel) = {
     b.scale = lastBagel.scale*step
     b.shift = Pos(shiftCalc(lastBagel, b),0)
+    b.thick = lastBagel.thick + Pos(0.01f, 0.01f)
     lastBagel = b
     bagels = bagels ++ List(b)
   }
 
+  def alone: Boolean = bagels.tail.isEmpty
 
   def move: Unit = {
-    if (!World.contains(position + speed addX size.x) && !World.contains(position + speed + size)) jump
+  //  if (!World.contains(position + speed addX size.x) && !World.contains(position + speed + size)) jump
     center += speed
 /*
     if (outer.thick.x < 0.2f) {
@@ -181,12 +198,13 @@ class Ball extends SImage {
   }
 
   def jump: Unit = if (grounded) {
-    speed += Pos(0, 20)
+    speed += Pos(0, 25)
   } else if (glued) speed += Pos(0, -1)
 
 
-  def grounded: Boolean = World.contains(position addX size.x)
-  def glued: Boolean = World.contains(position + size)
+
+  def grounded: Boolean = World.contains(position addX size.x/2)
+  def glued: Boolean = World.contains(position + Pos(0.5f, 1)*size)
 
 
 }

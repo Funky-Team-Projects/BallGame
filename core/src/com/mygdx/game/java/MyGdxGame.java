@@ -19,8 +19,8 @@ import com.mygdx.game.scala.World;
 
 public class MyGdxGame extends ApplicationAdapter {
 
-    final int WIDTH = 3200;
-    final int HEIGHT = 1900;
+    final int WIDTH = 1600;
+    final int HEIGHT = 950;
 
 	SpriteBatch batch;
 	Texture img;
@@ -39,16 +39,24 @@ public class MyGdxGame extends ApplicationAdapter {
         ball = World.hero();
 
         level = new Level(new Pos(90, 120));
-        block = new Block(new Pos(0,0), new Pos(1220, 40),new Color(0, 0.5f, 0.7f, 1));
+        block = new Block(new Pos(0,0), new Pos(1220, 40), Color.TEAL);
         level.add(block);
-        level.add(new Block(new Pos(1440,0), new Pos(1220, 40),new Color(0.2f, 0.8f, 0, 1)));
-        level.add(new Block(new Pos(1640,350), new Pos(1220, 40),new Color(0.6f, 0, 0.4f, 1)));
-        level.add(new Block(new Pos(2840, 0), new Pos(1220, 40),new Color(0.51f, 0.49f, 0f, 1)));
-        level.add(new Block(new Pos(3840, 250), new Pos(1220, 40),new Color(0.49f, 0.51f, 0f, 1)));
+        level.add(new Block(new Pos(1440,0), new Pos(1220, 40), Color.MAROON));
+        level.add(new Block(new Pos(1680,350), new Pos(1220, 40), Color.PURPLE));
+        level.add(new Block(new Pos(2900, 0), new Pos(1220, 40), new Color(0.2f, 0.5f, 0, 1)));
+
+        level.add(new Block(new Pos(3840, 250), new Pos(1220, 40), Color.ORANGE));
+        level.add(new Block(new Pos(4040, 450), new Pos(1220, 40), Color.ORANGE));
+        level.add(new Block(new Pos(3640, -200), new Pos(1220, 40), Color.ORANGE));
+
+        level.add(new Block(new Pos(5040, 0), new Pos(1220, 40), Color.TEAL));
+        level.add(new Block(new Pos(6540, 0), new Pos(1220, 40), Color.NAVY));
+        //level.add(new Block(new Pos(6440, 50), new Pos(1220, 40), new Color(0.59f, 0.43f, 0.24f, 1)));
         World.level(level);
 
         level.add(new PresentBox(new Pos(1940,100), new Pos(100, 100)));
-        level.add(new PresentBox(new Pos(4000,150), new Pos(100, 100)));
+        level.add(new PresentBox(new Pos(2940,100), new Pos(100, 100)));
+
 
         camera = new OrthographicCamera();
         camera.position.set(ball.getX(),ball.getY(),0);
