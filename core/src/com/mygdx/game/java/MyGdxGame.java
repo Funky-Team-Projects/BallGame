@@ -2,6 +2,7 @@ package com.mygdx.game.java;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,14 +14,12 @@ import com.mygdx.game.scala.Ball;
 import com.mygdx.game.scala.BallInputProcessor;
 import com.mygdx.game.scala.Block;
 import com.mygdx.game.scala.Level;
+import com.mygdx.game.scala.Parameters;
 import com.mygdx.game.scala.Pos;
 import com.mygdx.game.scala.PresentBox;
 import com.mygdx.game.scala.World;
 
 public class MyGdxGame extends ApplicationAdapter {
-
-    final int WIDTH = 1600;
-    final int HEIGHT = 950;
 
 	SpriteBatch batch;
 	Texture img;
@@ -31,6 +30,7 @@ public class MyGdxGame extends ApplicationAdapter {
     BallInputProcessor inputProcessor;
     OrthographicCamera camera;
     Level level;
+    Music music;
 
 	@Override
 	public void create () {
@@ -60,13 +60,19 @@ public class MyGdxGame extends ApplicationAdapter {
 
         camera = new OrthographicCamera();
         camera.position.set(ball.getX(),ball.getY(),0);
-        viewport = new StretchViewport(WIDTH, HEIGHT, camera);
+        viewport = new StretchViewport(Parameters.WIDTH(), Parameters.HEIGHT(), camera);
+        World.viewport(viewport);
 
         stage = new Stage(viewport, batch);       /**Creates stage on our viewport with our batch*/
         stage.addActor(ball);                     /**add actor to the stage*/
 
         inputProcessor = new BallInputProcessor(ball);
         Gdx.input.setInputProcessor(inputProcessor);
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("Diablo 2 - Tristram Theme.mp3"));
+        music.setLooping(true);
+        music.setVolume(0.3f);
+        music.play();
 
 
 
@@ -75,14 +81,11 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void render () {
 
-     //   Gdx.gl.glClearColor(0, 0, 0, 1);
-	//	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.position.set(ball.position().x() + WIDTH/3,ball.position().y(), 0);
-
-        World.draw(batch);
-        World.move();
         stage.getViewport().setCamera(camera);
+        World.move();
+        camera.position.set(ball.position().x() + Parameters.WIDTH()/3,ball.position().y(), 0);
+        World.draw(batch);
         stage.draw();
         stage.act(Gdx.graphics.getDeltaTime());  /**Calls method acts to all actors*/
 
@@ -90,6 +93,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        stage.dispose();                        /**Just a good thing to do*/
+        /**Just a good thing to do*/
+        stage.dispose();
+
     }
 }

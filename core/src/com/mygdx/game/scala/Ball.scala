@@ -24,7 +24,7 @@ class Ball extends SImage {
   add(new Bagel)
   add(new Bagel)
 
-  def shiftCalc(first: Bagel, second: Bagel): Float ={
+  def shiftCalc(first: Bagel, second: Bagel): Float = {
     (first.scale.x*(1.0f-first.thick.x) - second.scale.x)*size.x/2.0f
   }
 
@@ -149,7 +149,7 @@ class Ball extends SImage {
   }
 
   override def act(delta: Float) = {
-    bagels.tail.foldLeft(-2.0f){
+    bagels.tail.foldLeft((if (glued) 1 else -1)*3.0f){
       (r, bagel) => {
         bagel.rotate(r)
         -r*1.5f
@@ -167,7 +167,7 @@ class Ball extends SImage {
   def add(b: Bagel) = {
     b.scale = lastBagel.scale*step
     b.shift = Pos(shiftCalc(lastBagel, b),0)
-    b.thick = lastBagel.thick + Pos(0.01f, 0.01f)
+   // b.thick = lastBagel.thick + Pos(0.01f, 0.01f)
     lastBagel = b
     bagels = bagels ++ List(b)
   }

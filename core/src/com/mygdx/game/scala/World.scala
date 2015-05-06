@@ -1,7 +1,9 @@
 package com.mygdx.game.scala
 
 
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.{SpriteBatch, Batch}
+import com.badlogic.gdx.utils.viewport.{StretchViewport, Viewport}
 import math.round
 
 /**
@@ -11,9 +13,14 @@ object World {
 
   val acceleration = Pos(0, -1)
   val hero = new Ball
+  var viewport: Viewport = new StretchViewport(0, 0, new OrthographicCamera())
  // val respawn = Pos(45,200)
 
   var level: Level = new Level
+
+  def viewport(viewport: Viewport): Unit = {
+    this.viewport = viewport
+  }
 
   def level(level: Level): Unit = {
     this.level = level

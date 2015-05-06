@@ -8,13 +8,13 @@ import com.badlogic.gdx.graphics.g2d.Batch
  */
 class Bagel extends SDrawable{
 
-  val circle = new TextureDrawable("ball.png")
+  val circle = new TextureDrawable("ring.jpg")
   val back = new TextureDrawable("ball.png")
 
   var thick = Pos(0.2f,0.2f)
 
   circle.color = new Color(1,1,1,1)
-  back.color = new Color(0,0,0,1)
+  back.color = new Color(0,0,0,0)
 
   def scale: Pos = circle.scale
   def scale_=(pos: Pos): Unit = {
