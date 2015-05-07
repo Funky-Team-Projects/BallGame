@@ -69,10 +69,10 @@ public class MyGdxGame extends ApplicationAdapter {
         inputProcessor = new BallInputProcessor(ball);
         Gdx.input.setInputProcessor(inputProcessor);
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("Diablo 2 - Tristram Theme.mp3"));
+     /*   music = Gdx.audio.newMusic(Gdx.files.internal("Diablo 2 - Tristram Theme.mp3"));
         music.setLooping(true);
         music.setVolume(0.3f);
-        music.play();
+        music.play();*/
 
 
 

@@ -15,25 +15,28 @@ class Ball extends SImage {
 
   val step: Pos = Pos(0.68f, 0.68f)
 
+  var rotat: Float = 0
   var colorDiff: Float = 0
   var speed: Pos = Pos(10, 0)
 
-  var lastBagel: Bagel = new Bagel
-  var bagels: List[Bagel] = List(lastBagel)
+  var lastBagel: TextureDrawable = new TextureDrawable("ring.jpg")
+  var bagels: List[TextureDrawable] = List(lastBagel)
 
-  add(new Bagel)
-  add(new Bagel)
+  add(new TextureDrawable("ring.jpg"))
+  add(new TextureDrawable("ring.jpg"))
 
-  def shiftCalc(first: Bagel, second: Bagel): Float = {
-    (first.scale.x*(1.0f-first.thick.x) - second.scale.x)*size.x/2.0f
+  def shiftCalc(first: TextureDrawable, second: TextureDrawable): Float = {
+    (first.scale.x*(1.0f-0.2f) - second.scale.x)*size.x/2.0f
   }
 
-  override def draw(batch: Batch, parentAlpha: Float) = {
+  override def draw(batch: Batch, parentAlpha: Float): Unit = {
     /**Drawing Psychedelic circle*/
 
-    bagels.foldLeft(Pos(0,0)) { (shift, bagel) => {
-        bagel.draw(batch, center + shift, size)
-        shift + bagel.shift
+    bagels.foldLeft((Pos(0,0), 1)) { ( t , bagel) => {
+        bagel.drawRotated(batch, center + t._1, size, t._2*(if(glued) rotat else -rotat))
+        rotat += 0.5f
+        if (rotat == 360) rotat = 1
+       (t._1 + bagel.shift, -t._2)
       }
     }
   }
@@ -77,25 +80,25 @@ class Ball extends SImage {
     shiftChange(middle, -middle.shift.mod - shiftCalc(outer, middle, size))
     shiftChange(inner, -inner.shift.mod - shiftCalc(middle, inner, size))
 */
-    if (bagels.head.circle.color != color) {
-      val coloredBagel: Option[Bagel] = bagels.find(b => b.circle.color == color)
+    if (bagels.head.color != color) {
+      val coloredBagel: Option[TextureDrawable] = bagels.find(b => b.color == color)
       coloredBagel match {
         case Some(b) => {
-          val color = bagels.head.circle.color
+          val color = bagels.head.color
           //  val thick = outer.thick
 
-          bagels.head.circle.color = b.circle.color
+          bagels.head.color = b.color
           //  outer.thick = inner.thick
 
-          b.circle.color = color
+          b.color = color
           //  inner.thick = thick
         }
         case _ => {
-          val optionBagel: Option[Bagel] = bagels.find(b => b.circle.color == Color.WHITE)
+          val optionBagel: Option[TextureDrawable] = bagels.find(b => b.color == Color.WHITE)
           optionBagel match {
             case Some(bagel) => {
-              bagel.circle.color = bagels.head.circle.color
-              bagels.head.circle.color = color
+              bagel.color = bagels.head.color
+              bagels.head.color = color
 
               /*   val thick = bagel.thick
           bagel.thick = bagels.head.thick
@@ -117,7 +120,7 @@ class Ball extends SImage {
     if (!alone) {
       val bagelTail = bagels.reverse.tail
       lastBagel = bagelTail.head
-      lastBagel.circle.color = color
+      lastBagel.color = color
       bagels = bagelTail.reverse
 
     }
@@ -149,7 +152,7 @@ class Ball extends SImage {
   }
 
   override def act(delta: Float) = {
-    bagels.tail.foldLeft((if (glued) 1 else -1)*3.0f){
+   bagels.tail.foldLeft((if (glued) 1 else -1)*3.0f){
       (r, bagel) => {
         bagel.rotate(r)
         -r*1.5f
@@ -159,15 +162,14 @@ class Ball extends SImage {
 
   def gift(box: PresentBox) = {
     box.present match {
-      case b: Bagel => add(b)
+      case b: TextureDrawable => add(b)
       case _ =>
     }
   }
 
-  def add(b: Bagel) = {
+  def add(b: TextureDrawable) = {
     b.scale = lastBagel.scale*step
     b.shift = Pos(shiftCalc(lastBagel, b),0)
-   // b.thick = lastBagel.thick + Pos(0.01f, 0.01f)
     lastBagel = b
     bagels = bagels ++ List(b)
   }

@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 /**
  * Created by Denis on 07-Mar-15.
  */
-class TextureDrawable extends TextureRegionDrawable {
+class TextureDrawable extends TextureRegionDrawable with SDrawable{
 
   var scale: Pos = Pos(1,1)
   var shift: Pos = Pos(0,0)
@@ -27,6 +27,11 @@ class TextureDrawable extends TextureRegionDrawable {
 
   def drawC(batch: Batch, position: Pos, size: Pos): Unit ={
     draw(batch, position - size*scale/2, size)
+  }
+
+  def drawRotated(batch: Batch, position: Pos, size: Pos, rotation: Float): Unit = {
+    batch.setColor(color)
+    super.draw(batch, position.x + shift.x - size.x/2, position.y + shift.y - size.y/2, size.x/2, size.y/2, size.x, size.y, scale.x, scale.x, rotation)
   }
 
   def rotate(degree: Float): Unit = {

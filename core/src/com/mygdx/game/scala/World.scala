@@ -35,10 +35,10 @@ object World {
       hero.speed = Pos(10, 0)
       hero.center = level.respawn
       if (hero.alone) {
-        hero.add(new Bagel)
-        hero.add(new Bagel)
-        hero.add(new Bagel)
-        hero.add(new Bagel)
+        hero.add(new TextureDrawable("ring.jpg"))
+        hero.add(new TextureDrawable("ring.jpg"))
+        hero.add(new TextureDrawable("ring.jpg"))
+
       }
     }
     hero.move
