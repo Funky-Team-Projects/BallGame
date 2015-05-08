@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
  */
 class TextureDrawable extends TextureRegionDrawable with SDrawable{
 
+  setRegion(new TextureRegion(new Texture("ring.jpg")))
+
   var scale: Pos = Pos(1,1)
   var shift: Pos = Pos(0,0)
   var color: Color = new Color(1, 1, 1, 1)

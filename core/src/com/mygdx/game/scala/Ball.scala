@@ -17,13 +17,18 @@ class Ball extends SImage {
 
   var rotat: Float = 0
   var colorDiff: Float = 0
-  var speed: Pos = Pos(10, 0)
+  var speed: Pos = Pos(30, 0)
 
-  var lastBagel: TextureDrawable = new TextureDrawable("ring.jpg")
+  var blockColor: Option[Color] = None
+
+
+  var lastBagel: TextureDrawable = new TextureDrawable()
   var bagels: List[TextureDrawable] = List(lastBagel)
 
-  add(new TextureDrawable("ring.jpg"))
-  add(new TextureDrawable("ring.jpg"))
+  add(new TextureDrawable())
+  add(new TextureDrawable())
+  add(new TextureDrawable())
+  add(new TextureDrawable())
 
   def shiftCalc(first: TextureDrawable, second: TextureDrawable): Float = {
     (first.scale.x*(1.0f-0.2f) - second.scale.x)*size.x/2.0f
@@ -32,13 +37,16 @@ class Ball extends SImage {
   override def draw(batch: Batch, parentAlpha: Float): Unit = {
     /**Drawing Psychedelic circle*/
 
-    bagels.foldLeft((Pos(0,0), 1)) { ( t , bagel) => {
-        bagel.drawRotated(batch, center + t._1, size, t._2*(if(glued) rotat else -rotat))
-        rotat += 0.5f
+    bagels.foldLeft((Pos(0,0), 1.0f)) { ( t , bagel) => {
+        bagel.drawRotated(batch, center + t._1, size, t._2*rotat)
+        rotat += (if (glued) 1f else -1f)
         if (rotat == 360) rotat = 1
-       (t._1 + bagel.shift, -t._2)
+       (t._1 + bagel.shift, -t._2*1.35f)
       }
     }
+  }
+  private def colorMatch(c1: Color, c2: Color): Boolean = {
+    (c1.r == c2.r) && (c1.g == c2.g) && (c1.b == c2.b)
   }
 
   def colorMatcher(color: Color): Unit = {
@@ -79,9 +87,11 @@ class Ball extends SImage {
 
     shiftChange(middle, -middle.shift.mod - shiftCalc(outer, middle, size))
     shiftChange(inner, -inner.shift.mod - shiftCalc(middle, inner, size))
-*/
+    */
+
+     blockColor = Some(color)
     if (bagels.head.color != color) {
-      val coloredBagel: Option[TextureDrawable] = bagels.find(b => b.color == color)
+      val coloredBagel: Option[TextureDrawable] = bagels.find(b => colorMatch(b.color,color))
       coloredBagel match {
         case Some(b) => {
           val color = bagels.head.color
@@ -91,28 +101,45 @@ class Ball extends SImage {
           //  outer.thick = inner.thick
 
           b.color = color
+
           //  inner.thick = thick
         }
         case _ => {
-          val optionBagel: Option[TextureDrawable] = bagels.find(b => b.color == Color.WHITE)
+          val optionBagel: Option[TextureDrawable] = bagels.find(b => colorMatch(b.color, Color.WHITE))
           optionBagel match {
             case Some(bagel) => {
               bagel.color = bagels.head.color
-              bagels.head.color = color
+              bagels.head.color = new Color(color)
 
               /*   val thick = bagel.thick
           bagel.thick = bagels.head.thick
           bagels.head.thick = thick*/
             }
-            case None => {
-              kill(color)
-              if (!alone)
-                colorMatcher(color)
-            }
+            case None =>
+
+
+           /*   if (!alone)
+                colorMatcher(color)*/
+
+
           }
         }
       }
      // colorDiff = Math.sqrt(colorDiff).toFloat / 50
+    }
+  }
+
+
+  def kill(): Unit = {
+    if (!alone) {
+      val b = bagels.head
+      bagels.head.color = lastBagel.color
+      lastBagel.color = bagels.head.color
+
+      val bagelTail = bagels.reverse.tail
+      lastBagel = bagelTail.head
+      bagels = bagelTail.reverse
+
     }
   }
 
@@ -140,13 +167,13 @@ class Ball extends SImage {
   }
 
   def stickTo(pix: SPixel):Unit ={
-    position = pix.position - size
+    position = pix.position - size*Pos(0.5f, 1)
     colorMatcher(pix.color)
     speed = Pos(speed.x,0)
   }
 
   def groundTo(pix: SPixel):Unit ={
-    position = pix.position addX -size.x
+    position = pix.position addX -size.x/2
     colorMatcher(pix.color)
     speed = Pos(speed.x,0)
   }
@@ -176,9 +203,31 @@ class Ball extends SImage {
 
   def alone: Boolean = bagels.tail.isEmpty
 
+  def fade: Unit = {
+    val colorStep = 0.05f
+    if (grounded || glued) {
+      if (blockColor.isDefined)
+        if (colorMatch(blockColor.get, bagels.head.color)) {
+          if (bagels.head.color.a < 1)
+            bagels.head.color.a += colorStep
+        }
+        else {
+          bagels.head.color.a -= colorStep
+          if (bagels.head.color.a <= 0) {
+            bagels.head.color.a = 1
+            kill
+          }
+        }
+    }
+
+  }
+
   def move: Unit = {
+
   //  if (!World.contains(position + speed addX size.x) && !World.contains(position + speed + size)) jump
     center += speed
+
+    fade
 /*
     if (outer.thick.x < 0.2f) {
       thickChange(outer, Pos(0.001f, 0.001f).mod*2)
@@ -201,6 +250,7 @@ class Ball extends SImage {
 
   def jump: Unit = if (grounded) {
     speed += Pos(0, 25)
+    blockColor = None
   } else if (glued) speed += Pos(0, -1)
 
 

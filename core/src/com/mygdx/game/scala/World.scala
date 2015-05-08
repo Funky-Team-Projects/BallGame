@@ -16,14 +16,21 @@ object World {
   var viewport: Viewport = new StretchViewport(0, 0, new OrthographicCamera())
  // val respawn = Pos(45,200)
 
-  var level: Level = new Level
+  var level: EndlessLevel = new EndlessLevel(Pos(90, 120))
 
   def viewport(viewport: Viewport): Unit = {
     this.viewport = viewport
   }
 
-  def level(level: Level): Unit = {
+  /*def level(level: StandartLevel): Unit = {
     this.level = level
+  }*/
+
+  //def bounds: Pos = hero.position + Pos(-1,1)*2000
+
+  def ridOf: Unit = {
+    val b = level.blocks.head
+    if (hero.position.x > b.position.x) level.inc
   }
 
   def draw(batch: Batch): Unit = {
@@ -31,19 +38,23 @@ object World {
   }
 
   def move = {
-    if (hero.position.y < -200) {
-      hero.speed = Pos(10, 0)
+    if (hero.position.y < -400) {
+      level = new EndlessLevel(Pos(90, 120))
+      hero.speed = Pos(30, 0)
       hero.center = level.respawn
+      level.t = 10
       if (hero.alone) {
-        hero.add(new TextureDrawable("ring.jpg"))
-        hero.add(new TextureDrawable("ring.jpg"))
-        hero.add(new TextureDrawable("ring.jpg"))
+        hero.add(new TextureDrawable())
+        hero.add(new TextureDrawable())
+        hero.add(new TextureDrawable())
+        hero.add(new TextureDrawable())
 
       }
     }
     hero.move
     presentCheck
     pixelChooser(pixelFinder)
+    ridOf
   }
 
   def presentCheck: Unit = {
@@ -57,7 +68,7 @@ object World {
     }
   }
 
-  def pixelFinder: (Option[SPixel], Option[SPixel]) = (findP(hero.position addX hero.size.x, hero.speed), findP(hero.position + hero.size, hero.speed, false))
+  def pixelFinder: (Option[SPixel], Option[SPixel]) = (findP(hero.position addX hero.size.x/2, hero.speed), findP(hero.position + Pos(0.5f, 1)*hero.size, hero.speed, false))
 
   def pixelChooser(posVariants: (Option[SPixel], Option[SPixel])): Unit=  {
     posVariants match {

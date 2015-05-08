@@ -15,7 +15,7 @@ case class Pos(x: Float, y: Float) {
 
   def -(that: Pos): Pos = Pos(this.x - that.x, this.y - that.y)
 
-  def *(that: Pos): Pos = Pos(this.x * that.y, this.y * that.y)
+  def *(that: Pos): Pos = Pos(this.x * that.x, this.y * that.y)
   def *(num: Float): Pos = Pos(this.x*num, this.y*num)
   def /(that: Pos): Pos = Pos(this.x / that.y, this.y / that.y)
   def /(num: Float): Pos = Pos(this.x / num, this.y / num)
@@ -32,4 +32,5 @@ case class Pos(x: Float, y: Float) {
 
 object Pos {
   def apply(vector: Vector2): Pos = apply(vector.x, vector.y)
+  def apply(x: Double, y: Double): Pos = apply(x.toFloat, y.toFloat)
 }
