@@ -134,7 +134,7 @@ class Ball extends SImage {
     if (!alone) {
       val b = bagels.head
       bagels.head.color = lastBagel.color
-      lastBagel.color = bagels.head.color
+      lastBagel.color = b.color
 
       val bagelTail = bagels.reverse.tail
       lastBagel = bagelTail.head
@@ -177,6 +177,7 @@ class Ball extends SImage {
     colorMatcher(pix.color)
     speed = Pos(speed.x,0)
   }
+
 
   override def act(delta: Float) = {
    bagels.tail.foldLeft((if (glued) 1 else -1)*3.0f){

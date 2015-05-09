@@ -13,6 +13,8 @@ allprojects {
     apply plugin: "idea"
 
     version = '1.0'
+
+
     ext {
         appName = 'test-gdx-game'
         gdxVersion = '1.5.4'
@@ -27,6 +29,8 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
     }
+
+
 }
 
 project(":desktop") {
