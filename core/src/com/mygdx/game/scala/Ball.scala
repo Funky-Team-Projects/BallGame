@@ -13,11 +13,12 @@ class Ball extends SImage {
   center = Pos(30, 60)
   size = Pos(120, 120)
 
+  val standart: Pos = Pos(30,0)
   val step: Pos = Pos(0.68f, 0.68f)
 
   var rotat: Float = 0
   var colorDiff: Float = 0
-  var speed: Pos = Pos(30, 0)
+  var speed: Pos = standart
 
   var blockColor: Option[Color] = None
 
@@ -166,14 +167,20 @@ class Ball extends SImage {
 
   }
 
-  def stickTo(pix: SPixel):Unit ={
-    position = pix.position - size*Pos(0.5f, 1)
+  def wallTo(pix: SPixel): Unit = {
+    position = pix.position - size*Pos(1f, 0.5f)
     colorMatcher(pix.color)
-    speed = Pos(speed.x,0)
+    speed = Pos(0,0)
+  }
+
+  def stickTo(pix: SPixel):Unit = {
+    position = pix.position - size
+    colorMatcher(pix.color)
+    speed = Pos(speed.x ,0)
   }
 
   def groundTo(pix: SPixel):Unit ={
-    position = pix.position addX -size.x/2
+    position = pix.position addX -size.x
     colorMatcher(pix.color)
     speed = Pos(speed.x,0)
   }
@@ -226,8 +233,8 @@ class Ball extends SImage {
   def move: Unit = {
 
   //  if (!World.contains(position + speed addX size.x) && !World.contains(position + speed + size)) jump
-    center += speed
 
+    center += speed*(if (walled) Pos(0,1) else Pos(1,1))
     fade
 /*
     if (outer.thick.x < 0.2f) {
@@ -245,19 +252,24 @@ class Ball extends SImage {
       shiftChange(middle, colorDiff)
     }
     */
+    if (!walled) speed = Pos(standart.x, speed.y)
     if (!grounded && !glued) speed += World.acceleration
 
   }
 
-  def jump: Unit = if (grounded) {
+  def jump: Unit = if (grounded && !glued) {
     speed += Pos(0, 25)
     blockColor = None
-  } else if (glued) speed += Pos(0, -1)
+  } else if (glued && !grounded) speed += Pos(0, -1)
 
+  def containsMiddle(pos: Pos): Boolean = {
+    (position.x < pos.x && pos.x <= position.x + size.x) && (position.y < pos.y && pos.y < position.y + size.y)
+  }
 
-
-  def grounded: Boolean = World.contains(position addX size.x/2)
-  def glued: Boolean = World.contains(position + Pos(0.5f, 1)*size)
+  def inFly: Boolean = !grounded && !walled && !glued
+  def grounded: Boolean = World.contains(position addX size.x) || World.contains(position)
+  def walled: Boolean = /*World.contains(position + size*Pos(1,0.5f))*/  World.intersects
+  def glued: Boolean = World.contains(position + size) || World.contains(position addY size.y)
 
 
 }

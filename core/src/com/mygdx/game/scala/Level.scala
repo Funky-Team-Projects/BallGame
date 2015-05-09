@@ -59,7 +59,7 @@ class EndlessLevel(val respawn: Pos) extends Level {
       case 4 => Color.PURPLE
       case 5 => new Color(0.2f, 0.5f, 0, 1)
       case 6 => Color.NAVY
-      case _ => Color.CYAN
+      case _ => Color.MAGENTA
     }
   }
 
