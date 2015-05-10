@@ -13,8 +13,10 @@ class Ball extends SImage {
   center = Pos(30, 60)
   size = Pos(120, 120)
 
-  val standart: Pos = Pos(30,0)
+  val accel: Pos = Pos(1, 0)
+  val standart: Pos = Pos(25,0)
   val step: Pos = Pos(0.68f, 0.68f)
+  var way: Int = 1
 
   var rotat: Float = 0
   var colorDiff: Float = 0
@@ -51,44 +53,6 @@ class Ball extends SImage {
   }
 
   def colorMatcher(color: Color): Unit = {
-    /*
-    def dist(c1: Color, c2: Color) = {
-      (c1.r - c2.r)*(c1.r - c2.r) + (c1.g - c2.g)*(c1.g - c2.g) + (c1.b - c2.b)*(c1.b - c2.b)
-    }
-
-    val out = dist(outer.circle.color, color)
-    val mid = dist(middle.circle.color, color)
-    val inn = dist(inner.circle.color, color)
-
-    colorDiff = out
-    if (inn < mid && inn < out) {
-      colorDiff = inn
-
-      val color = outer.circle.color
-      val thick = outer.thick
-
-      outer.circle.color = inner.circle.color
-      outer.thick = inner.thick
-
-      inner.circle.color = color
-      inner.thick = thick
-    }
-    if (mid < inn && mid < out) {
-      colorDiff = mid
-
-      val color = outer.circle.color
-      val thick = outer.thick
-
-      outer.circle.color = middle.circle.color
-      outer.thick = middle.thick
-
-      middle.circle.color = color
-      middle.thick = thick
-    }
-
-    shiftChange(middle, -middle.shift.mod - shiftCalc(outer, middle, size))
-    shiftChange(inner, -inner.shift.mod - shiftCalc(middle, inner, size))
-    */
 
      blockColor = Some(color)
     if (bagels.head.color != color) {
@@ -170,7 +134,7 @@ class Ball extends SImage {
   def wallTo(pix: SPixel): Unit = {
     position = pix.position - size*Pos(1f, 0.5f)
     colorMatcher(pix.color)
-    speed = Pos(0,0)
+    speed = Pos(0,speed.y)
   }
 
   def stickTo(pix: SPixel):Unit = {
@@ -236,40 +200,51 @@ class Ball extends SImage {
 
     center += speed*(if (walled) Pos(0,1) else Pos(1,1))
     fade
-/*
-    if (outer.thick.x < 0.2f) {
-      thickChange(outer, Pos(0.001f, 0.001f).mod*2)
-      shiftChange(middle, -0.001f)
-    }
-    if (middle.thick.x < 0.2f) {
-      thickChange(middle, Pos(0.001f, 0.001f).mod*2)
-      shiftChange(inner, -0.001f)
-    }
-    if (inner.thick.x < 0.2f) thickChange(inner, 0.001f)
-    if (grounded || glued) {
-      if (outer.thick.x > 0) thickChange(outer, -Pos(colorDiff, colorDiff).mod * 2)
 
-      shiftChange(middle, colorDiff)
-    }
-    */
-    if (!walled) speed = Pos(standart.x, speed.y)
-    if (!grounded && !glued) speed += World.acceleration
+   /* val b = World.findIntersection
+    if (b.isDefined) {
+
+    }*/
+    /*
+    if (b.isDefined) {
+      val calcG = (Pos(b.get.position.x + b.get.size.x / 2, position.y  + size.y) - (position addX size.x / 2)).mod
+      val calcT = (Pos(b.get.position.x + b.get.size.x / 2, position.y) - (position + size * Pos(0.5f, 1f))).mod
+      val calcR = (Pos(b.get.position.x, position.y + size.y / 2) - (position + size * Pos(1, 0.5f))).mod
+
+      if ((calcG <= calcT) && (calcG <= calcR)) groundTo(SPixel(Pos(b.get.position.x + b.get.size.x / 2, position.y  + size.y), b.get.bColor, 1))
+      else if ((calcT < calcG) && (calcT <= calcR)) stickTo(SPixel(Pos(b.get.position.x + b.get.size.x / 2, position.y), b.get.bColor, 2))
+      else if ((calcR < calcT) && (calcR <= calcG)) wallTo(SPixel(Pos(b.get.position.x, position.y + size.y/2), b.get.bColor, 3))
+    }*/
+   // if (b.isDefined) wallTo(SPixel(Pos(b.get.position.x, position.y + size.y/2), b.get.bColor, 3))
+
+
+  //  if (!walled) speed = Pos(standart.x, speed.y)
+    speed += (if (speed.x < standart.x && !walled) accel else Pos(0,0))
+    if (!grounded && !glued) speed += World.acceleration//*(if (walled) way else 1)
+   // else if (glued && walled) speed += World.acceleration
+
 
   }
 
   def jump: Unit = if (grounded && !glued) {
     speed += Pos(0, 25)
+    if (walled) way = -1
     blockColor = None
-  } else if (glued && !grounded) speed += Pos(0, -1)
+  } else if (glued && !grounded) {
+    speed += Pos(0, -1)
+    if (walled) way = 1
+  }
 
   def containsMiddle(pos: Pos): Boolean = {
-    (position.x < pos.x && pos.x <= position.x + size.x) && (position.y < pos.y && pos.y < position.y + size.y)
+    (center - pos).mod < size.x/2
+   // (position.x <= pos.x && pos.x <= position.x + size.x) && (position.y < pos.y && pos.y < position.y + size.y)
   }
 
   def inFly: Boolean = !grounded && !walled && !glued
-  def grounded: Boolean = World.contains(position addX size.x) || World.contains(position)
+  def grounded: Boolean = World.contains(position addX size.x - 1) || World.contains(position)
   def walled: Boolean = /*World.contains(position + size*Pos(1,0.5f))*/  World.intersects
-  def glued: Boolean = World.contains(position + size) || World.contains(position addY size.y)
+  def glued: Boolean = World.contains(position + size addX - 1) || World.contains(position addY size.y)
+  def blocked: Boolean = grounded && glued && walled
 
 
 }

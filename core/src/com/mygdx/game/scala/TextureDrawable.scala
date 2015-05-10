@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
  */
 class TextureDrawable extends TextureRegionDrawable with SDrawable{
 
-  setRegion(new TextureRegion(new Texture("ringr.jpg")))
+  setRegion(new TextureRegion(new Texture("legend.jpg")))
 
   var scale: Pos = Pos(1,1)
   var shift: Pos = Pos(0,0)

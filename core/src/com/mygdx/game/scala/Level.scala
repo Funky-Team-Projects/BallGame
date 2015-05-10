@@ -13,13 +13,15 @@ abstract class Level {
 
   val respawn: Pos
 
-  val back = new TextureDrawable("lava2.jpg")
+  val back = new TextureDrawable("lava.jpg")
+
   var background: Color = new Color(0, 0, 0, 1)
 
   var presents: List[PresentBox] = List()
 
   def add(p: PresentBox): Unit = presents = p :: presents
   def remove(p: PresentBox): Unit = presents = presents.filter(pr => pr != p)
+
 }
 
 class StandartLevel(val respawn: Pos) extends Level {
@@ -39,7 +41,7 @@ class StandartLevel(val respawn: Pos) extends Level {
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
     batch.begin()
-    back.draw(batch, Pos(World.viewport.getCamera.position.x*0.98f, World.viewport.getCamera.position.y*0.9f) - Parameters.SIZE*Pos(0.85f,1.2f), Parameters.SIZE*Pos(1.8f, 2.1f))
+    back.draw(batch, Pos(World.viewport.getCamera.position.x*0.98f, World.viewport.getCamera.position.y*0.9f) - Parameters.SIZE*Pos(0.85f,1.2f), Parameters.SIZE*Pos(1.4f, 1.9f))
     blocks.foreach(_.draw(batch))
     presents.foreach(_.draw(batch))
     batch.end()
@@ -63,12 +65,13 @@ class EndlessLevel(val respawn: Pos) extends Level {
     }
   }
 
-  var t: Int = 10
-  lazy val blockStream: Stream[Block] = new Block(new Pos(0,0), new Pos(1220, 40), Color.TEAL) #:: generate(0)
-  def blocks = blockStream.take(t).toList
-  //def blocks(bounds: Pos): List[Block] = blockStream.filter(b => bounds.x <= b.position.x && b.position.x <= bounds.y).take(10).toList
+  var t: Int = 0
+  lazy val blockStream: Stream[Block] = new Block(new Pos(0,0), new Pos(1220, 25), Color.TEAL) #::  generate(600)
+  def blocks = blockStream.drop(t).take(15).toList
   def generate(sh: Float): Stream[Block] = {
-    new Block(Pos(Math.random()*1000.0 + 200.0f + sh, Math.random()*500.0f - 200.0f), Pos(Math.random()*700 + 500, 40), randomColor) #:: generate(sh + 900)
+    new Block(Pos(Math.random()*600.0 + sh, Math.random()*300.0f - 350.0f), Pos(Math.random()*700 + 300, 25), randomColor)#::
+    new Block(Pos(Math.random()*600.0 + 300 + sh, Math.random()*300.0f), Pos(Math.random()*700 + 300, 25), randomColor)#::
+    new Block(Pos(Math.random()*600.0 + 600 + sh, Math.random()*300.0f + 350.0f), Pos(Math.random()*700 + 300, 25), randomColor)#:: generate(sh + 1300)
   }
 
   def inc: Unit = {

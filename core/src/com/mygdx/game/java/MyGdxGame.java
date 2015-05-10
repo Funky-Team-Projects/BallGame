@@ -13,10 +13,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.scala.Ball;
 import com.mygdx.game.scala.BallInputProcessor;
 import com.mygdx.game.scala.Block;
-import com.mygdx.game.scala.StandartLevel;
 import com.mygdx.game.scala.Parameters;
 import com.mygdx.game.scala.Pos;
 import com.mygdx.game.scala.PresentBox;
+import com.mygdx.game.scala.StandartLevel;
 import com.mygdx.game.scala.World;
 
 public class MyGdxGame extends ApplicationAdapter {
@@ -35,7 +35,6 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-        img = new Texture("badlogic.jpg");
         ball = World.hero();
 
         standartLevel = new StandartLevel(new Pos(90, 120));
@@ -71,8 +70,9 @@ public class MyGdxGame extends ApplicationAdapter {
 
         music = Gdx.audio.newMusic(Gdx.files.internal("Diablo 2 - Tristram Theme.mp3"));
         music.setLooping(true);
-        music.setVolume(0.2f);
+        music.setVolume(0.6f);
         music.play();
+
 
 
 
