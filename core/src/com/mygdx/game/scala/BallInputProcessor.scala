@@ -12,7 +12,9 @@ class BallInputProcessor(ball: Ball) extends InputProcessor{
 
   override def keyDown(keycode: Int): Boolean = {
     keycode match {
-      case Keys.UP => ball.jump
+      case Keys.UP => {
+        ball.jump
+      }
       case _ =>
     }
     true

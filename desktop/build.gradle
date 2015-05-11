@@ -15,6 +15,8 @@ task fatJar(type: Jar) {
     }
     baseName = project.name + '-all'
     from files(project.assetsDir)
+    from files(sourceSets.main.output.classesDir)
+    from files(sourceSets.main.output.resourcesDir)
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
@@ -29,10 +31,11 @@ task run(dependsOn: classes, type: JavaExec) {
 }
 
 task dist(type: Jar) {
+    from files(project.assetsDir)
     from files(sourceSets.main.output.classesDir)
     from files(sourceSets.main.output.resourcesDir)
     from {configurations.compile.collect {zipTree(it)}}
-    from files(project.assetsDir);
+    with jar
  
     manifest {
         attributes 'Main-Class': project.mainClassName

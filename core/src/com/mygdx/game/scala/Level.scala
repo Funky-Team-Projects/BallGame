@@ -52,26 +52,20 @@ class StandartLevel(val respawn: Pos) extends Level {
 
 class EndlessLevel(val respawn: Pos) extends Level {
 
+  var colors: List[Color] = List(Color.TEAL, Color.MAROON, Color.PURPLE, Color.DARK_GRAY)
+
   def randomColor: Color = {
-    val c: Int = (Math.random()*7).toInt
-    c match {
-      case 1 => Color.TEAL
-      case 2 => Color.MAROON
-      case 3 => Color.ORANGE
-      case 4 => Color.PURPLE
-      case 5 => new Color(0.2f, 0.5f, 0, 1)
-      case 6 => Color.NAVY
-      case _ => Color.MAGENTA
-    }
+    val c: Int = (Math.random()*colors.length).toInt
+    colors.drop(c).head
   }
 
   var t: Int = 0
   lazy val blockStream: Stream[Block] = new Block(new Pos(0,0), new Pos(1220, 25), Color.TEAL) #::  generate(600)
   def blocks = blockStream.drop(t).take(15).toList
   def generate(sh: Float): Stream[Block] = {
-    new Block(Pos(Math.random()*600.0 + sh, Math.random()*300.0f - 350.0f), Pos(Math.random()*700 + 300, 25), randomColor)#::
-    new Block(Pos(Math.random()*600.0 + 300 + sh, Math.random()*300.0f), Pos(Math.random()*700 + 300, 25), randomColor)#::
-    new Block(Pos(Math.random()*600.0 + 600 + sh, Math.random()*300.0f + 350.0f), Pos(Math.random()*700 + 300, 25), randomColor)#:: generate(sh + 1300)
+    new Block(Pos(Math.random()*600.0 + sh, Math.random()*300.0f - 350.0f), Pos(Math.random()*600 + 400, 25), randomColor)#::
+    new Block(Pos(Math.random()*600.0 + 300 + sh, Math.random()*300.0f), Pos(Math.random()*600 + 400, 25), randomColor)#::
+    new Block(Pos(Math.random()*600.0 + 600 + sh, Math.random()*300.0f + 350.0f), Pos(Math.random()*600 + 400, 25), randomColor)#:: generate(sh + 1100)
   }
 
   def inc: Unit = {

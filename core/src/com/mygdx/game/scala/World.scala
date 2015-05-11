@@ -2,7 +2,7 @@ package com.mygdx.game.scala
 
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.{Color, OrthographicCamera}
 import com.badlogic.gdx.graphics.g2d.{TextureAtlas, SpriteBatch, Batch}
 import com.badlogic.gdx.scenes.scene2d.ui.{Table, Skin, Label}
 import com.badlogic.gdx.utils.viewport.{StretchViewport, Viewport}
@@ -17,9 +17,9 @@ object World {
   val acceleration = Pos(0, -1)
   val hero = new Ball
 
-  val uiSkin = new Skin(Gdx.files.internal("uiskin.json"))
-  uiSkin.addRegions(new TextureAtlas("uiskin.atlas"))
-  val label = new Label("0", uiSkin)
+ // val uiSkin = new Skin(Gdx.files.internal("uiskin.json"))
+  //uiSkin.addRegions(new TextureAtlas("uiskin.atlas"))
+  val label = new Label("0", Parameters.uiSkin)
   label.setColor(1,1,1,1)
   label.setPosition(Parameters.WIDTH - 100, Parameters.HEIGHT - 100)
   label.setFontScale(1.5f)
@@ -46,15 +46,23 @@ object World {
     hero.speed = hero.standart
     hero.center = level.respawn
     level.t = 0
-    if (hero.alone) {
-      hero.add(new TextureDrawable())
-      hero.add(new TextureDrawable())
-      hero.add(new TextureDrawable())
-      hero.add(new TextureDrawable())
+    level.colors = List(Color.TEAL, Color.MAROON, Color.PURPLE, Color.DARK_GRAY)
+    hero.reset
+    //  hero.add(new TextureDrawable())
+    //  hero.add(new TextureDrawable())
 
-    }
 
   }
+
+  private def colorMatch(c1: Color, c2: Color): Boolean = {
+    (c1.r == c2.r) && (c1.g == c2.g) && (c1.b == c2.b)
+  }
+
+  def toGray(color: Color) = {
+    level.colors = level.colors.filter(c => !colorMatch(c, color))
+    level.blocks.map(b => if (colorMatch(b.bColor, color)) {b.bColor = Color.DARK_GRAY; b} else b)
+  }
+
 
   def ridOf: Unit = {
     val b = level.blocks.drop(4).head
@@ -152,22 +160,22 @@ object World {
           if ((t1 <= 1 && t1 >= 0) && (t2 <= 1 && t2 >= 0)) Some(SPixel(start + radius + change*t1, b.bColor, 2)) else None
         } else None
       }
-      def checkWall(b: Block): Option[SPixel] = {
+/*      def checkWall(b: Block): Option[SPixel] = {
         if (change.x != 0) {
           val t1: Float = (b.position.x - (start.x + radius.x)) / change.x
           val t2: Float = ((start.y + radius.y/2.0f) - b.position.y + change.y * t1) / b.size.y
           if ((t1 <= 1 && t1 >= 0) && (t2 <= 1 && t2 >= 0)) Some(SPixel(start + radius*Pos(1, 0.5f) + change*t1, b.bColor, 3)) else None
         }
         else None
-      }
+      }*/
       for{
         b <- level.blocks
         // additional = if (normal) b.size.y else 0
 
         t1 = checkBottom(b)
         t2 = checkTop(b)
-        t3 = checkWall(b)
-        t = t1 :: t2 :: t3 :: List()
+     //   t3 = checkWall(b)
+        t = t1 :: t2 :: List()
 
       } yield t//SPixel(start + change*t1, b.bColor)
     }

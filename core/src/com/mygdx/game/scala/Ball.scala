@@ -14,24 +14,27 @@ class Ball extends SImage {
   size = Pos(120, 120)
 
   val accel: Pos = Pos(1, 0)
-  val standart: Pos = Pos(25,0)
-  val step: Pos = Pos(0.68f, 0.68f)
-  var way: Int = 1
+  val standart: Pos = Pos(20,0)
+  val step: Pos = Pos(0.6f, 0.6f)
 
   var rotat: Float = 0
-  var colorDiff: Float = 0
   var speed: Pos = standart
 
   var blockColor: Option[Color] = None
 
 
-  var lastBagel: TextureDrawable = new TextureDrawable()
+  var lastBagel: TextureDrawable = new TextureDrawable(Color.PURPLE)
   var bagels: List[TextureDrawable] = List(lastBagel)
 
-  add(new TextureDrawable())
-  add(new TextureDrawable())
-  add(new TextureDrawable())
-  add(new TextureDrawable())
+  reset
+  def reset = {
+    lastBagel = new TextureDrawable(Color.PURPLE)
+    bagels = List(lastBagel)
+    add(new TextureDrawable(Color.TEAL))
+   // add(new TextureDrawable(Color.ORANGE))
+    add(new TextureDrawable(Color.MAROON))
+  //  add(new TextureDrawable(new Color(0.2f, 0.5f, 0, 1)))
+  }
 
   def shiftCalc(first: TextureDrawable, second: TextureDrawable): Float = {
     (first.scale.x*(1.0f-0.2f) - second.scale.x)*size.x/2.0f
@@ -54,43 +57,35 @@ class Ball extends SImage {
 
   def colorMatcher(color: Color): Unit = {
 
-     blockColor = Some(color)
-    if (bagels.head.color != color) {
-      val coloredBagel: Option[TextureDrawable] = bagels.find(b => colorMatch(b.color,color))
-      coloredBagel match {
-        case Some(b) => {
-          val color = bagels.head.color
-          //  val thick = outer.thick
+    blockColor = Some(color)
+    if (color != Color.DARK_GRAY) {
+      if (bagels.head.color != color) {
+        val coloredBagel: Option[TextureDrawable] = bagels.find(b => colorMatch(b.color, color))
+        coloredBagel match {
+          case Some(b) => {
+            val color = bagels.head.color
 
-          bagels.head.color = b.color
-          //  outer.thick = inner.thick
+            bagels.head.color = b.color
 
-          b.color = color
-
-          //  inner.thick = thick
-        }
-        case _ => {
-          val optionBagel: Option[TextureDrawable] = bagels.find(b => colorMatch(b.color, Color.WHITE))
-          optionBagel match {
-            case Some(bagel) => {
-              bagel.color = bagels.head.color
-              bagels.head.color = new Color(color)
-
-              /*   val thick = bagel.thick
-          bagel.thick = bagels.head.thick
-          bagels.head.thick = thick*/
-            }
-            case None =>
-
-
-           /*   if (!alone)
-                colorMatcher(color)*/
+            b.color = color
 
 
           }
+          case _ => {
+            val optionBagel: Option[TextureDrawable] = bagels.find(b => colorMatch(b.color, Color.WHITE))
+            optionBagel match {
+              case Some(bagel) => {
+                bagel.color = bagels.head.color
+                bagels.head.color = new Color(color)
+              }
+
+              case None =>
+
+
+            }
+          }
         }
       }
-     // colorDiff = Math.sqrt(colorDiff).toFloat / 50
     }
   }
 
@@ -98,6 +93,7 @@ class Ball extends SImage {
   def kill(): Unit = {
     if (!alone) {
       val b = bagels.head
+      World.toGray(b.color)
       bagels.head.color = lastBagel.color
       lastBagel.color = b.color
 
@@ -106,6 +102,7 @@ class Ball extends SImage {
       bagels = bagelTail.reverse
 
     }
+    if (alone && bagels.head.color.a <= 0) World.restart
   }
 
   def kill(color: Color): Unit = {
@@ -176,7 +173,7 @@ class Ball extends SImage {
   def alone: Boolean = bagels.tail.isEmpty
 
   def fade: Unit = {
-    val colorStep = 0.05f
+    val colorStep = 0.025f
     if (grounded || glued) {
       if (blockColor.isDefined)
         if (colorMatch(blockColor.get, bagels.head.color)) {
@@ -186,8 +183,8 @@ class Ball extends SImage {
         else {
           bagels.head.color.a -= colorStep
           if (bagels.head.color.a <= 0) {
-            bagels.head.color.a = 1
             kill
+            bagels.head.color.a = 1
           }
         }
     }
@@ -201,8 +198,16 @@ class Ball extends SImage {
     center += speed*(if (walled) Pos(0,1) else Pos(1,1))
     fade
 
-   /* val b = World.findIntersection
-    if (b.isDefined) {
+    val b = World.findIntersection
+  /*  if (b.isDefined) {
+      if (containsMiddle(b.get.position)) {
+        val dist = (center - b.get.position).mod
+        center = (center*size.x/2.0f)/dist
+      }
+      if (containsMiddle(b.get.position addY b.get.size.y)) {
+        val dist = (center - (b.get.position addY b.get.size.y)).mod
+        center = (center*size.x/2.0f)/dist
+      }
 
     }*/
     /*
@@ -228,11 +233,10 @@ class Ball extends SImage {
 
   def jump: Unit = if (grounded && !glued) {
     speed += Pos(0, 25)
-    if (walled) way = -1
     blockColor = None
   } else if (glued && !grounded) {
     speed += Pos(0, -1)
-    if (walled) way = 1
+    blockColor = None
   }
 
   def containsMiddle(pos: Pos): Boolean = {
@@ -241,9 +245,9 @@ class Ball extends SImage {
   }
 
   def inFly: Boolean = !grounded && !walled && !glued
-  def grounded: Boolean = World.contains(position addX size.x - 1) || World.contains(position)
+  def grounded: Boolean = World.contains(position addX size.x) || World.contains(position)
   def walled: Boolean = /*World.contains(position + size*Pos(1,0.5f))*/  World.intersects
-  def glued: Boolean = World.contains(position + size addX - 1) || World.contains(position addY size.y)
+  def glued: Boolean = World.contains(position + size) || World.contains(position addY size.y)
   def blocked: Boolean = grounded && glued && walled
 
 

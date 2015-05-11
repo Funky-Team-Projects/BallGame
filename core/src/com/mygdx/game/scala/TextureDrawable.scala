@@ -19,6 +19,10 @@ class TextureDrawable extends TextureRegionDrawable with SDrawable{
     this()
     setRegion(region)
   }
+  def this(color: Color) {
+    this()
+    this.color = new Color(color)
+  }
   def this(texture: Texture) = this(new TextureRegion(texture))
   def this(texturePath: String) = this(new Texture(texturePath))
 
