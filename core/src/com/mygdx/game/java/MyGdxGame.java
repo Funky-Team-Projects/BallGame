@@ -21,6 +21,7 @@ public class MyGdxGame extends ApplicationAdapter {
     }
     @Override
     public void dispose() {
+        Parameters.dispose();
         /**Just a good thing to do*/
  //       stage.dispose();
 

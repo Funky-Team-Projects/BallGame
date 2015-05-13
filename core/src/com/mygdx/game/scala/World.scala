@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.{Color, OrthographicCamera}
 import com.badlogic.gdx.graphics.g2d.{TextureAtlas, SpriteBatch, Batch}
 import com.badlogic.gdx.scenes.scene2d.ui.{Table, Skin, Label}
-import com.badlogic.gdx.utils.viewport.{StretchViewport, Viewport}
+import com.badlogic.gdx.utils.viewport.{FitViewport, FillViewport, StretchViewport, Viewport}
 import math.round
 
 
@@ -19,15 +19,21 @@ object World {
 
  // val uiSkin = new Skin(Gdx.files.internal("uiskin.json"))
   //uiSkin.addRegions(new TextureAtlas("uiskin.atlas"))
-  val label = new Label("0", Parameters.uiSkin)
+  val label = new Label("0 meters", Parameters.uiSkin)
   label.setColor(1,1,1,1)
   label.setPosition(Parameters.WIDTH - 100, Parameters.HEIGHT - 100)
   label.setFontScale(1.5f)
+  val resultLabel = new Label("0 meters", Parameters.uiSkin)
+  resultLabel.setColor(1,1,1,1)
+  resultLabel.setPosition(Parameters.WIDTH - 100, Parameters.HEIGHT - 100)
+  resultLabel.setFontScale(1.5f)
   val table = new Table()
+  table.add(resultLabel).row()
   table.add(label)
 
+  var bestResult: Int = Parameters.preferences.getInteger("score", 0)
 
-  var viewport: Viewport = new StretchViewport(0, 0, new OrthographicCamera())
+  var viewport: Viewport = new FitViewport(0, 0, new OrthographicCamera())
  // val respawn = Pos(45,200)
 
   var level: EndlessLevel = new EndlessLevel(Pos(90, 120))
@@ -41,6 +47,9 @@ object World {
   }
 
   def restart = {
+    if (hero.position.x/250 > bestResult) bestResult = (hero.position.x/250).toInt
+    Parameters.preferences.putInteger("score", bestResult)
+    Parameters.preferences.flush()
 
     level = new EndlessLevel(Pos(90, 120))
     hero.speed = hero.standart
@@ -71,9 +80,10 @@ object World {
 
   def draw(batch: Batch): Unit = {
     level.draw(batch)
-    label.setText((hero.position.x/250).toInt.toString)
+    resultLabel.setText(bestResult.toString ++ " meters")
+    label.setText((hero.position.x/250).toInt.toString ++ " meters")
     //label.setPosition(hero.position.x + Parameters.WIDTH/2, hero.position.y + Parameters.HEIGHT/2)
-    table.setPosition(hero.position.x - 300, hero.position.y + Parameters.HEIGHT/2 - 50)
+    table.setPosition(hero.position.x - 200, hero.position.y + Parameters.HEIGHT/2 - 50)
     batch.begin()
     table.draw(batch, 1)
     batch.end()
@@ -81,7 +91,7 @@ object World {
   }
 
   def move = {
-    if (hero.position.y < -400 || hero.blocked) {
+    if (hero.position.y < -1000 || hero.blocked) {
       restart
     }
     hero.move
@@ -181,6 +191,9 @@ object World {
     }
     met.flatten.flatten
   }
+
   /******************************************/
+
+
 
 }

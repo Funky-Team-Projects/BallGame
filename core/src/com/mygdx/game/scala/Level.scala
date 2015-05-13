@@ -63,9 +63,9 @@ class EndlessLevel(val respawn: Pos) extends Level {
   lazy val blockStream: Stream[Block] = new Block(new Pos(0,0), new Pos(1220, 25), Color.TEAL) #::  generate(600)
   def blocks = blockStream.drop(t).take(15).toList
   def generate(sh: Float): Stream[Block] = {
-    new Block(Pos(Math.random()*600.0 + sh, Math.random()*300.0f - 350.0f), Pos(Math.random()*600 + 400, 25), randomColor)#::
-    new Block(Pos(Math.random()*600.0 + 300 + sh, Math.random()*300.0f), Pos(Math.random()*600 + 400, 25), randomColor)#::
-    new Block(Pos(Math.random()*600.0 + 600 + sh, Math.random()*300.0f + 350.0f), Pos(Math.random()*600 + 400, 25), randomColor)#:: generate(sh + 1100)
+    new Block(Pos(Math.random()*200.0 + sh, Math.random()*200.0f - 400.0f), Pos(Math.random()*600 + 400, 25), randomColor)#::
+    new Block(Pos(Math.random()*200.0 + 500 + sh, Math.random()*200.0f), Pos(Math.random()*600 + 400, 25), randomColor)#::
+    new Block(Pos(Math.random()*200.0 + 1000 + sh, Math.random()*200.0f + 400.0f), Pos(Math.random()*600 + 400, 25), randomColor)#:: generate(sh + 1100)
   }
 
   def inc: Unit = {

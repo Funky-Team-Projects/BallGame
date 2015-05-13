@@ -191,6 +191,13 @@ class Ball extends SImage {
 
   }
 
+  def smartShift(pos: Pos): Unit = {
+    val distY: Float = pos.y - center.y
+    val pointX: Float = center.x + Math.sqrt((size.x / 2) * (size.x / 2) - distY * distY).toFloat
+    center = Pos(center.x - (pointX - pos.x), center.y)
+
+  }
+
   def move: Unit = {
 
   //  if (!World.contains(position + speed addX size.x) && !World.contains(position + speed + size)) jump
@@ -199,6 +206,16 @@ class Ball extends SImage {
     fade
 
     val b = World.findIntersection
+    if (b.isDefined) {
+      if (b.get.position.y > center.y && (b.get.position.y != position.y + size.y)) {
+        smartShift(b.get.position)
+      } else if (b.get.position.y + b.get.size.y < center.y && (b.get.position.y + b.get.size.y != position.y)) {
+        smartShift(b.get.position addY b.get.size.y)
+      } else {
+        wallTo(SPixel(Pos(b.get.position.x, position.y + size.y / 2), b.get.bColor, 3))
+      }
+    }
+
   /*  if (b.isDefined) {
       if (containsMiddle(b.get.position)) {
         val dist = (center - b.get.position).mod
@@ -245,9 +262,9 @@ class Ball extends SImage {
   }
 
   def inFly: Boolean = !grounded && !walled && !glued
-  def grounded: Boolean = World.contains(position addX size.x) || World.contains(position)
+  def grounded: Boolean = World.contains(position addX size.x/2) || World.contains(position)
   def walled: Boolean = /*World.contains(position + size*Pos(1,0.5f))*/  World.intersects
-  def glued: Boolean = World.contains(position + size) || World.contains(position addY size.y)
+  def glued: Boolean = World.contains(position + size addX -size.x/2) || World.contains(position addY size.y)
   def blocked: Boolean = grounded && glued && walled
 
 
