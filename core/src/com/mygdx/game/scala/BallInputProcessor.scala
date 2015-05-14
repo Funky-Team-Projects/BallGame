@@ -25,6 +25,7 @@ class BallInputProcessor(ball: Ball) extends InputProcessor{
   override def mouseMoved(screenX: Int, screenY: Int): Boolean = false
 
   override def touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean = {
+    ball.jump
   /*  val result: Option[Block] = World.find(Pos(3200/screenX, 1900/screenY))
     result match {
       case Some(b) => {

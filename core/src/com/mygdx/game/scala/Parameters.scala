@@ -12,8 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
  * Created by Denis on 05-May-15.
  */
 object Parameters {
-  final val WIDTH: Float = 2000
-  final val HEIGHT: Float = 1150
+  final val WIDTH: Float = 1500
+  final val HEIGHT: Float = 900
   final val SIZE = Pos(WIDTH, HEIGHT)
   final val RATIO = WIDTH/HEIGHT
   final val uiSkin = new Skin(Gdx.files.internal("uiskin.json"))

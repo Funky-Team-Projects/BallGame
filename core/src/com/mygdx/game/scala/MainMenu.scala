@@ -59,8 +59,8 @@ class MainMenu extends Screen {
   override def show(): Unit = {
     //The elements are displayed in the order you add them.
     //The first appear on top, the last at the bottom.
-    table.add(buttonPlay).width(100).row()
-    table.add(buttonExit).width(100).row()
+    table.add(buttonPlay).width(300).height(100).row()
+    table.add(buttonExit).width(300).height(100).row()
 
     table.setFillParent(true)
     stage.addActor(table)

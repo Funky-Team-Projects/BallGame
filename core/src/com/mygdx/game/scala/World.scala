@@ -22,11 +22,11 @@ object World {
   val label = new Label("0 meters", Parameters.uiSkin)
   label.setColor(1,1,1,1)
   label.setPosition(Parameters.WIDTH - 100, Parameters.HEIGHT - 100)
-  label.setFontScale(1.5f)
+  label.setFontScale(3f)
   val resultLabel = new Label("0 meters", Parameters.uiSkin)
   resultLabel.setColor(1,1,1,1)
   resultLabel.setPosition(Parameters.WIDTH - 100, Parameters.HEIGHT - 100)
-  resultLabel.setFontScale(1.5f)
+  resultLabel.setFontScale(3f)
   val table = new Table()
   table.add(resultLabel).row()
   table.add(label)
@@ -51,7 +51,9 @@ object World {
     Parameters.preferences.putInteger("score", bestResult)
     Parameters.preferences.flush()
 
+
     level = new EndlessLevel(Pos(90, 120))
+
     hero.speed = hero.standart
     hero.center = level.respawn
     level.t = 0

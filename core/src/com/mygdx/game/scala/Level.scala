@@ -83,4 +83,5 @@ class EndlessLevel(val respawn: Pos) extends Level {
     presents.foreach(_.draw(batch))
     batch.end()
   }
+
 }
