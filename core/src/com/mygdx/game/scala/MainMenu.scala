@@ -38,6 +38,14 @@ class MainMenu extends Screen {
     }
   })
 
+  buttonExit.addListener(new ClickListener {
+    override def clicked(event: InputEvent, x: Float, y: Float): Unit = {
+      Gdx.app.exit()
+     // android.os.Process.killProcess(android.os.Process.myPid());
+    }
+  })
+
+
 
   override def render(delta: Float): Unit = {
     Gdx.gl.glClearColor(0, 0, 0, 1)
