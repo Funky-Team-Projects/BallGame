@@ -41,7 +41,7 @@ class StandartLevel(val respawn: Pos) extends Level {
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
     batch.begin()
-    back.draw(batch, Pos(World.viewport.getCamera.position.x*0.98f, World.viewport.getCamera.position.y*0.9f) - Parameters.SIZE*Pos(0.85f,1.2f), Parameters.SIZE*Pos(1.4f, 1.9f))
+    back.draw(batch, Pos(Parameters.viewport.getCamera.position.x*0.98f, Parameters.viewport.getCamera.position.y*0.9f) - Parameters.SIZE*Pos(0.85f,1.2f), Parameters.SIZE*Pos(1.4f, 1.9f))
     blocks.foreach(_.draw(batch))
     presents.foreach(_.draw(batch))
     batch.end()
@@ -50,8 +50,10 @@ class StandartLevel(val respawn: Pos) extends Level {
 }
 
 
-class EndlessLevel(val respawn: Pos) extends Level {
+class EndlessLevel(val respawn: Pos) /*extends Level*/ {
 
+  val back: TextureDrawable = new TextureDrawable("lava.jpg")
+  var background: Color = new Color(0, 0, 0, 1)
   var colors: List[Color] = List(Color.TEAL, Color.MAROON, Color.PURPLE, Color.DARK_GRAY)
 
   def randomColor: Color = {
@@ -60,9 +62,9 @@ class EndlessLevel(val respawn: Pos) extends Level {
   }
 
   var t: Int = 0
-  lazy val blockStream: Stream[Block] = new Block(new Pos(0,0), new Pos(1220, 25), Color.TEAL) #::  generate(600)
-  def blocks = blockStream.drop(t).take(15).toList
-  def generate(sh: Float): Stream[Block] = {
+  private lazy val blockStream: Stream[Block] = new Block(new Pos(0,0), new Pos(1220, 25), Color.TEAL) #::  generate(600)
+  def blocks: List[Block] = blockStream.drop(t).take(15).toList
+  private def generate(sh: Float): Stream[Block] = {
     new Block(Pos(Math.random()*200.0 + sh, Math.random()*200.0f - 400.0f), Pos(Math.random()*600 + 400, 25), randomColor)#::
     new Block(Pos(Math.random()*200.0 + 500 + sh, Math.random()*200.0f), Pos(Math.random()*600 + 400, 25), randomColor)#::
     new Block(Pos(Math.random()*200.0 + 1000 + sh, Math.random()*200.0f + 400.0f), Pos(Math.random()*600 + 400, 25), randomColor)#:: generate(sh + 1100)
@@ -78,9 +80,9 @@ class EndlessLevel(val respawn: Pos) extends Level {
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
     batch.begin()
-    back.draw(batch, Pos(World.viewport.getCamera.position.x*0.99f, World.viewport.getCamera.position.y*0.5f) - Parameters.SIZE*Pos(0.85f,1.2f), Parameters.SIZE*Pos(1.8f, 2.1f))
+    back.draw(batch, Pos(Parameters.viewport.getCamera.position.x*0.99f, Parameters.viewport.getCamera.position.y*0.5f) - Parameters.SIZE*Pos(0.85f,1.2f), Parameters.SIZE*Pos(1.8f, 2.1f))
     blocks.foreach(_.draw(batch))
-    presents.foreach(_.draw(batch))
+   // presents.foreach(_.draw(batch))
     batch.end()
   }
 

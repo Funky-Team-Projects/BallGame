@@ -4,7 +4,7 @@ package com.mygdx.game.scala
 
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
-import com.badlogic.gdx.utils.viewport.{FillViewport, FitViewport, StretchViewport}
+import com.badlogic.gdx.utils.viewport.{Viewport, FillViewport, FitViewport, StretchViewport}
 import com.badlogic.gdx.{Preferences, Gdx, Screen}
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 
@@ -12,11 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
  * Created by Denis on 05-May-15.
  */
 object Parameters {
-  final val WIDTH: Float = 1500
-  final val HEIGHT: Float = 900
+  final val WIDTH: Float = 1900
+  final val HEIGHT: Float = 1100
   final val SIZE = Pos(WIDTH, HEIGHT)
-  final val RATIO = WIDTH/HEIGHT
-  final val uiSkin = new Skin(Gdx.files.internal("uiskin.json"))
+  val uiSkin = new Skin(Gdx.files.internal("uiskin.json"))
 
   val preferences: Preferences = Gdx.app.getPreferences("ball-prefs")
 

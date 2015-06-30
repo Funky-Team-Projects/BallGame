@@ -25,11 +25,6 @@ class MainMenu extends Screen {
   private val buttonExit: TextButton = new TextButton("Exit", Parameters.uiSkin)
 
 
-  var gameBegin: Boolean = false
-  def gameBegin(v: Boolean): Unit = gameBegin = v
-
-  val gameScreen = new GameScreen
-
   buttonPlay.addListener(new ClickListener {
     override def clicked(event: InputEvent, x: Float, y: Float): Unit = {
       Parameters.now = Parameters.gameScreen
@@ -45,7 +40,8 @@ class MainMenu extends Screen {
     }
   })
 
-
+  table.add(buttonPlay).width(300).height(100).row()
+  table.add(buttonExit).width(300).height(100).row()
 
   override def render(delta: Float): Unit = {
     Gdx.gl.glClearColor(0, 0, 0, 1)
@@ -67,8 +63,7 @@ class MainMenu extends Screen {
   override def show(): Unit = {
     //The elements are displayed in the order you add them.
     //The first appear on top, the last at the bottom.
-    table.add(buttonPlay).width(300).height(100).row()
-    table.add(buttonExit).width(300).height(100).row()
+
 
     table.setFillParent(true)
     stage.addActor(table)
@@ -79,7 +74,7 @@ class MainMenu extends Screen {
 
 
   override def hide(): Unit = {
-    dispose()
+    //dispose()
   }
 
 

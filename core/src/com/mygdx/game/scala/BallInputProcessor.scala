@@ -15,6 +15,11 @@ class BallInputProcessor(ball: Ball) extends InputProcessor{
       case Keys.UP => {
         ball.jump
       }
+      case Keys.ESCAPE => {
+        Parameters.gameScreen.hide()
+        Parameters.mainMenu.show()
+        Parameters.now = Parameters.mainMenu
+      }
       case _ =>
     }
     true
@@ -32,7 +37,7 @@ class BallInputProcessor(ball: Ball) extends InputProcessor{
         b.bColor = new Color(Math.random.toFloat, Math.random.toFloat, Math.random.toFloat, 1)
         true
       }
-      case _ => */false
+      case _ => */true
     //}
   }
 
